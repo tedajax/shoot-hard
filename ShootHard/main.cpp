@@ -33,7 +33,17 @@ int run()
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
     SDL_GLContext context = SDL_GL_CreateContext(window);
 
+    glewExperimental = GL_TRUE;
+    GLenum err = glewInit();
+    if (err != GLEW_OK) {
+        std::cout << "Error: " << glewGetErrorString(err) << std::endl;
+        std::cin.get();
+        return 1;
+    }
 
+    uint vertexArrayId;
+    glGenVertexArrays(1, &vertexArrayId);
+    glBindVertexArray(vertexArrayId);
 
     input::init();
     texture::manager::init(foundation::memory_globals::default_allocator(), renderer);
