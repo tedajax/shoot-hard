@@ -26,14 +26,13 @@ int run()
     SDL_Window* window = SDL_CreateWindow("Shoot Hard", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, SDL_WINDOW_SHOWN);
     SDL_Renderer* renderer = SDL_CreateRenderer(window, 0, SDL_RENDERER_ACCELERATED);
 
+    texture::init_textures(foundation::memory_globals::default_allocator(), renderer);
+
     foundation::Array<Sprite> sprites(foundation::memory_globals::default_allocator());
     foundation::array::set_capacity(sprites, 64);
     
-    SDL_Surface* imgSurface = IMG_Load("../Assets/p1_stand.png");
-    SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, imgSurface);
-
     Sprite s;
-    sprite::init(s, texture, 0);
+    sprite::init(s, texture::get("Assets/p1_stand.png"), 0);
     foundation::array::push_back(sprites, s);
 
     bool isRunning = true;
@@ -61,6 +60,8 @@ int run()
 
         SDL_RenderPresent(renderer);
     }
+
+    texture::terminate_textures();
 
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);

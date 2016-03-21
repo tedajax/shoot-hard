@@ -167,6 +167,7 @@
     <ClCompile Include="sprite.cpp" />
     <ClCompile Include="string_stream.cpp" />
     <ClCompile Include="foundation_unit_test.cpp" />
+    <ClCompile Include="texture.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="algorithm.h" />
@@ -183,6 +184,7 @@
     <ClInclude Include="sprite.h" />
     <ClInclude Include="string_stream.h" />
     <ClInclude Include="temp_allocator.h" />
+    <ClInclude Include="texture.h" />
     <ClInclude Include="types.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

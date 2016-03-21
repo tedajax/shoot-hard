@@ -5,11 +5,16 @@
 
 struct SDL_Texture;
 
-struct Sprite
+struct Texture
 {
     SDL_Texture* _texture;
     int _width;
     int _height;
+};
+
+struct Sprite
+{
+    Texture _texture;
     int layer;
     glm::vec2 position;
     float32 rotation;
