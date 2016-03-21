@@ -29,13 +29,13 @@ endif
 
 EXPLICIT_OPTIMIZATIONS =
 
-TARGET		= ShootHard
+TARGET		= shoot-hard
 CFLAGS		= -std=$(STD) -O$(OPT_LEVEL) $(EXPLICIT_OPTIMIZATIONS) -Wall $(INCLUDE_FLAGS) $(DEBUG_FLAGS) -Wno-unknown-pragmas
 
 LINKER		= $(CC) -o
 LFLAGS		= -Wall -I.
 
-SRCDIR		= $(TARGET)
+SRCDIR		= ShootHard
 OBJDIR		= obj
 BINDIR		= .
 
