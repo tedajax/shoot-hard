@@ -6,6 +6,7 @@
 #include "memory.h"
 #include "types.h"
 #include "array.h"
+#include "input.h"
 #include "sprite.h"
 
 int run();
@@ -26,11 +27,12 @@ int run()
     SDL_Window* window = SDL_CreateWindow("Shoot Hard", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, SDL_WINDOW_SHOWN);
     SDL_Renderer* renderer = SDL_CreateRenderer(window, 0, SDL_RENDERER_ACCELERATED);
 
-    texture::init_textures(foundation::memory_globals::default_allocator(), renderer);
+    input::init();
+    texture::manager::init(foundation::memory_globals::default_allocator(), renderer);
 
     foundation::Array<Sprite> sprites(foundation::memory_globals::default_allocator());
     foundation::array::set_capacity(sprites, 64);
-    
+
     Sprite s;
     sprite::init(s, texture::get("Assets/p1_stand.png"), 0);
     foundation::array::push_back(sprites, s);
@@ -46,11 +48,17 @@ int run()
                 break;
 
             case SDL_KEYDOWN:
-                if (event.key.keysym.scancode == SDL_SCANCODE_ESCAPE) {
-                    isRunning = false;
-                }
+                input::set_key_down(event.key.keysym.scancode);
+                break;
+
+            case SDL_KEYUP:
+                input::set_key_up(event.key.keysym.scancode);
                 break;
             }
+        }
+
+        if (input::get_key_down(SDL_SCANCODE_ESCAPE)) {
+            isRunning = false;
         }
 
         SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
@@ -59,9 +67,12 @@ int run()
         sprite::render_sprites(renderer, sprites);
 
         SDL_RenderPresent(renderer);
+
+        input::update();
     }
 
-    texture::terminate_textures();
+    texture::manager::terminate();
+    input::terminate();
 
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);

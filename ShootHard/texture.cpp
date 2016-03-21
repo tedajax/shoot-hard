@@ -19,21 +19,24 @@ namespace texture
 
     TextureGlobals _textures;
 
-    void init_textures(foundation::Allocator& _textureAlloactor, SDL_Renderer* _renderer)
+    namespace manager
     {
-        _textures._table = new foundation::Hash<Texture>(_textureAlloactor);
-        _textures.renderer = _renderer;
-    }
-
-    void terminate_textures()
-    {
-        for (auto itr = foundation::array::begin(_textures._table->_data); itr != foundation::array::end(_textures._table->_data); ++itr) {
-            if (itr->value._texture) {
-                SDL_DestroyTexture(itr->value._texture);
-            }
+        void init(foundation::Allocator& _textureAlloactor, SDL_Renderer* _renderer)
+        {
+            _textures._table = new foundation::Hash<Texture>(_textureAlloactor);
+            _textures.renderer = _renderer;
         }
 
-        delete _textures._table;
+        void terminate()
+        {
+            for (auto itr = foundation::array::begin(_textures._table->_data); itr != foundation::array::end(_textures._table->_data); ++itr) {
+                if (itr->value._texture) {
+                    SDL_DestroyTexture(itr->value._texture);
+                }
+            }
+
+            delete _textures._table;
+        }
     }
 
     const Texture& get(const char* _filename)
@@ -43,7 +46,7 @@ namespace texture
         if (foundation::hash::has(*_textures._table, key)) {
             return foundation::hash::get(*_textures._table, key, get_default());
         }
-        
+
         Texture texture;
         if (load(texture, _textures.renderer, _filename)) {
             foundation::hash::set(*_textures._table, key, texture);
@@ -76,7 +79,7 @@ namespace texture
 
         return true;
     }
-    
+
     void unload(Texture& _texture)
     {
         if (_texture._texture) {

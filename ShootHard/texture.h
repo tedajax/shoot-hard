@@ -7,8 +7,11 @@ struct SDL_Renderer;
 
 namespace texture
 {
-    void init_textures(foundation::Allocator& _textureAlloactor, SDL_Renderer* _renderer);
-    void terminate_textures();
+    namespace manager
+    {
+        void init(foundation::Allocator& _textureAlloactor, SDL_Renderer* _renderer);
+        void terminate();
+    }
 
     const Texture& get(const char* _filename);
 
