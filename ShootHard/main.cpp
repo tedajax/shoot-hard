@@ -1,5 +1,6 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include <gl/glew.h>
 #include <memory>
 #include <iostream>
 
@@ -25,21 +26,17 @@ int main(int argc, char* argv[])
 
 int run()
 {
-    SDL_Window* window = SDL_CreateWindow("Shoot Hard", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, SDL_WINDOW_SHOWN);
+    SDL_Window* window = SDL_CreateWindow("Shoot Hard", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE | SDL_WINDOW_SHOWN);
     SDL_Renderer* renderer = SDL_CreateRenderer(window, 0, SDL_RENDERER_ACCELERATED);
+    
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
+    SDL_GLContext context = SDL_GL_CreateContext(window);
+
+
 
     input::init();
     texture::manager::init(foundation::memory_globals::default_allocator(), renderer);
-
-    foundation::Array<Sprite> sprites(foundation::memory_globals::default_allocator());
-    foundation::array::set_capacity(sprites, 64);
-
-    foundation::array::push_back(sprites, sprite::create(texture::get("Assets/p1_stand.png")));
-
-    Sprite s = sprite::create(texture::get("Assets/p1_stand.png"), 1);
-    s.color = color::create(255, 0, 0);
-    s.position.x += 10;
-    foundation::array::push_back(sprites, s);
 
     bool isRunning = true;
 
@@ -65,13 +62,10 @@ int run()
             isRunning = false;
         }
 
-        SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
-        SDL_RenderClear(renderer);
+        glClearColor(1.f, 0.f, 0.f, 1.f);
+        glClear(GL_COLOR_BUFFER_BIT);
 
-        sprite::layer_sort_sprites(sprites);
-        sprite::render_sprites(renderer, sprites);
-
-        SDL_RenderPresent(renderer);
+        SDL_GL_SwapWindow(window);
 
         input::update();
     }
