@@ -5,6 +5,7 @@
 
 #include <memory>
 #include <cstdlib>
+#include <cstring>
 
 namespace foundation {
     namespace array
