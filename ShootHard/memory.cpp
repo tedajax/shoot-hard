@@ -1,7 +1,7 @@
 #include "memory.h"
 
-#include <stdlib.h>
-#include <assert.h>
+#include <cstdlib>
+#include <cassert>
 #include <new>
 
 namespace {

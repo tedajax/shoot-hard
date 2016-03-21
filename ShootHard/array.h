@@ -82,7 +82,7 @@ namespace foundation {
                 set_capacity(a, new_capacity);
         }
 
-        template<typename T> void set_capacity(Array<T> &a, uint32_t new_capacity)
+        template<typename T> inline void set_capacity(Array<T> &a, uint32_t new_capacity)
         {
             if (new_capacity == a._capacity)
                 return;
@@ -100,7 +100,7 @@ namespace foundation {
             a._capacity = new_capacity;
         }
 
-        template<typename T> void grow(Array<T> &a, uint32_t min_capacity)
+        template<typename T> inline void grow(Array<T> &a, uint32_t min_capacity)
         {
             uint32_t new_capacity = a._capacity*2 + 8;
             if (new_capacity < min_capacity)

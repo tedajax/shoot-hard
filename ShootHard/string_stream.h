@@ -3,8 +3,8 @@
 #include "collection_types.h"
 #include "array.h"
 
-#include <string.h>
-#include <stdio.h>
+#include <cstring>
+#include <cstdio>
 
 #include "snprintf_msvc.h"
 

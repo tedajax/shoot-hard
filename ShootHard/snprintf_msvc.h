@@ -1,8 +1,8 @@
 #pragma once
 
 #if defined(_MSC_VER)
-    #include <stdarg.h>
-    #include <stdio.h>
+    #include <cstdarg>
+    #include <cstdio>
 
     inline int vsnprintf_compat(char* buffer, size_t size, const char* format, va_list args)
     {

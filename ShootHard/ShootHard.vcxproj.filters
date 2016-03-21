@@ -30,14 +30,14 @@
     <ClCompile Include="murmur_hash.cpp">
       <Filter>Source Files\foundation</Filter>
     </ClCompile>
-    <ClCompile Include="sprite.cpp">
-      <Filter>Source Files\foundation</Filter>
-    </ClCompile>
     <ClCompile Include="string_stream.cpp">
       <Filter>Source Files\foundation</Filter>
     </ClCompile>
     <ClCompile Include="foundation_unit_test.cpp">
       <Filter>Source Files\foundation</Filter>
+    </ClCompile>
+    <ClCompile Include="sprite.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

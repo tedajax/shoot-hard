@@ -1,6 +1,6 @@
 #include "string_stream.h"
 
-#include <stdarg.h>
+#include <cstdarg>
 
 namespace foundation 
 {
