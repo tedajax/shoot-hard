@@ -10,8 +10,6 @@ struct Sprite
     SDL_Texture* _texture;
     int _width;
     int _height;
-    uint32 _format;
-    int _access;
     int layer;
     glm::vec2 position;
     float32 rotation;

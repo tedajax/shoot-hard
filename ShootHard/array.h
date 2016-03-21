@@ -2,6 +2,7 @@
 
 #include "collection_types.h"
 #include "memory.h"
+#include "algorithm.h"
 
 #include <memory>
 #include <cstdlib>
@@ -50,6 +51,8 @@ namespace foundation {
         template<typename T> void push_back(Array<T> &a, const T &item);
         /// Pops the last item from the array. The array cannot be empty.
         template<typename T> void pop_back(Array<T> &a);
+
+        template<typename T> void sort(Array<T>& _a, bool(*_lessThanFunc)(const T* e1, const T* e2));
     }
 
     namespace array
@@ -120,6 +123,11 @@ namespace foundation {
         template<typename T> inline void pop_back(Array<T> &a)
         {
             a._size--;
+        }
+
+        template<typename T> inline void sort(Array<T>& _a, bool(*_lessThanFunc)(const T* e1, const T* e2))
+        {
+            array_sort<T>(&_a, _lessThanFunc);
         }
     }
 

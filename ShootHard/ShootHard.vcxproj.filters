@@ -83,5 +83,8 @@
     <ClInclude Include="temp_allocator.h">
       <Filter>Header Files\foundation</Filter>
     </ClInclude>
+    <ClInclude Include="algorithm.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

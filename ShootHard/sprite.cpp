@@ -1,6 +1,6 @@
-#include "sprite.h"
-
 #include <SDL2/SDL.h>
+
+#include "sprite.h"
 
 namespace sprite
 {
@@ -12,29 +12,21 @@ namespace sprite
         _sprite.scale = glm::vec2(1.f, 1.f);
         _sprite.layer = _layer;
 
-        SDL_QueryTexture(_texture, &_sprite._format, &_sprite._access, &_sprite._width, &_sprite._height);
+        SDL_QueryTexture(_texture, nullptr, nullptr, &_sprite._width, &_sprite._height);
     }
 
-    void layer_sort_sprites(Sprite* _sprites, int _count)
+    void layer_sort_sprites(foundation::Array<Sprite>& _sprites)
     {
-
-    }
-
-    void render(Sprite& _sprite, SDL_Renderer* _renderer)
-    {
-        SDL_Rect r = SDL_Rect {
-            (int)_sprite.position.x,
-            (int)_sprite.position.y,
-            (int)(_sprite.scale.x * _sprite._width),
-            (int)(_sprite.scale.y * _sprite._height),
+        const auto layerLessThanFunc = [](const Sprite* _s1, const Sprite* _s2) {
+            return _s1->layer < _s2->layer;
         };
 
-        SDL_RenderCopyEx(_renderer, _sprite._texture, nullptr, &r, _sprite.rotation, nullptr, SDL_FLIP_NONE);
+        foundation::array::sort<Sprite>(_sprites, layerLessThanFunc);
     }
 
-    void render_sprites(SDL_Renderer* _renderer, Sprite* _sprites, int _count)
+    void render_sprites(SDL_Renderer* _renderer, foundation::Array<Sprite>& _sprites)
     {
-        for (int i = 0; i < _count; ++i) {
+        for (int i = 0, len = foundation::array::size(_sprites); i < len; ++i) {
             SDL_Rect r = SDL_Rect{
                 (int)_sprites[i].position.x,
                 (int)_sprites[i].position.y,
