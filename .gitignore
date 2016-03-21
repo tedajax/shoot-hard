@@ -1,0 +1,14 @@
+/Debug/
+/Release/
+/x64/
+/ShootHard/Debug/
+/ShootHard/Release/
+/ShootHard/x64/
+/ShootHard/*.dll
+/obj/
+*.opensdf
+*.sdf
+*.suo
+*.vcxproj.user
+*.VC.opendb
+/shoot-hard
