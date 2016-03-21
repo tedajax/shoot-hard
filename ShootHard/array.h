@@ -69,7 +69,7 @@ namespace foundation {
         template <typename T> inline void clear(Array<T> &a) {resize(a,0);}
         template <typename T> inline void trim(Array<T> &a) {set_capacity(a,a._size);}
 
-        template <typename T> void resize(Array<T> &a, uint32_t new_size)
+        template <typename T> inline void resize(Array<T> &a, uint32_t new_size)
         {
             if (new_size > a._capacity)
                 grow(a, new_size);
