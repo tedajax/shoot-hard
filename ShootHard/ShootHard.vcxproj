@@ -93,6 +93,7 @@
     <Link>
       <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>Debug</GenerateDebugInformation>
     </Link>
     <CustomBuildStep>
       <Command>copy_dlls $(Configuration) $(Platform)</Command>
@@ -110,6 +111,7 @@
     <Link>
       <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>Debug</GenerateDebugInformation>
     </Link>
     <CustomBuildStep>
       <Command>copy_dlls $(Configuration) $(Platform)</Command>
@@ -161,6 +163,7 @@
     </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="input.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="memory.cpp" />
     <ClCompile Include="murmur_hash.cpp" />
@@ -174,8 +177,11 @@
     <ClInclude Include="array.h" />
     <ClInclude Include="basictypes.h" />
     <ClInclude Include="collection_types.h" />
+    <ClInclude Include="color.h" />
     <ClInclude Include="foundation_unit_test.h" />
     <ClInclude Include="hash.h" />
+    <ClInclude Include="input.h" />
+    <ClInclude Include="math.h" />
     <ClInclude Include="memory.h" />
     <ClInclude Include="memory_types.h" />
     <ClInclude Include="murmur_hash.h" />

@@ -42,6 +42,9 @@
     <ClCompile Include="texture.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="input.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="basictypes.h">
@@ -90,6 +93,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="texture.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="input.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="color.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="math.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

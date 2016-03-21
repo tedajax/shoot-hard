@@ -8,6 +8,7 @@
 #include "array.h"
 #include "input.h"
 #include "sprite.h"
+#include "color.h"
 
 int run();
 
@@ -33,8 +34,11 @@ int run()
     foundation::Array<Sprite> sprites(foundation::memory_globals::default_allocator());
     foundation::array::set_capacity(sprites, 64);
 
-    Sprite s;
-    sprite::init(s, texture::get("Assets/p1_stand.png"), 0);
+    foundation::array::push_back(sprites, sprite::create(texture::get("Assets/p1_stand.png")));
+
+    Sprite s = sprite::create(texture::get("Assets/p1_stand.png"), 1);
+    s.color = color::create(255, 0, 0);
+    s.position.x += 10;
     foundation::array::push_back(sprites, s);
 
     bool isRunning = true;
@@ -64,6 +68,7 @@ int run()
         SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
         SDL_RenderClear(renderer);
 
+        sprite::layer_sort_sprites(sprites);
         sprite::render_sprites(renderer, sprites);
 
         SDL_RenderPresent(renderer);
