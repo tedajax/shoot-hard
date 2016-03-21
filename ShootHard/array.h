@@ -127,7 +127,7 @@ namespace foundation {
 
         template<typename T> inline void sort(Array<T>& _a, bool(*_lessThanFunc)(const T* e1, const T* e2))
         {
-            array_sort<T>(&_a, _lessThanFunc);
+            array_sort_count<T>(begin(*_a), size(*_a), _lessThanFunc);
         }
     }
 
