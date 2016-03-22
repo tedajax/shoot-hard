@@ -101,7 +101,7 @@ int run()
 
         angle += 0.01f;
 
-        glm::mat4 projection = glm::perspective(glm::radians, 4.f / 3.f, 0.1f, 100.f);
+        glm::mat4 projection = glm::perspective(glm::radians(90.f), 4.f / 3.f, 0.1f, 100.f);
         glm::mat4 view = glm::lookAt(glm::vec3(0.f, 0.f, -10.f), glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f, 1.f, 0.f));
         glm::mat4 model = glm::rotate(glm::mat4(1.f), angle, glm::vec3(0.f, 1.f, 0.f));
 
