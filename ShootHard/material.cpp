@@ -1,5 +1,8 @@
 #include "material.h"
+#include "hash.h"
+#include "murmur_hash.h"
 
+#include <glm/gtc/type_ptr.hpp>
 #include <iostream>
 #include <gl/glew.h>
 
@@ -33,6 +36,8 @@ namespace material
 
         _materialOut._programId = programId;
 
+        _materialOut._uniforms = new foundation::Hash<int>(foundation::memory_globals::default_allocator());
+
         return true;
     }
 
@@ -41,10 +46,39 @@ namespace material
         if (_material._programId > 0) {
             glDeleteProgram(_material._programId);
         }
+
+        delete _material._uniforms;
     }
 
     void use(const Material& _material)
     {
         glUseProgram(_material._programId);
+    }
+
+    int load_uniform(Material& _material, const char* _uniformName)
+    {
+        uint64 key = foundation::murmur_hash_64(_uniformName, (uint32)strlen(_uniformName), 0);
+
+        if (foundation::hash::has(*_material._uniforms, key)) {
+            return foundation::hash::get(*_material._uniforms, key, 0);
+        }
+
+        int location = glGetUniformLocation(_material._programId, _uniformName);
+        foundation::hash::set(*_material._uniforms, key, location);
+        return location;
+    }
+
+    template <>
+    void set_uniform<float32>(Material& _material, const char* _uniformName, const float32& _param)
+    {
+        int uniform = load_uniform(_material, _uniformName);
+        glUniform1f(uniform, _param);
+    }
+
+    template <>
+    void set_uniform<glm::mat4>(Material& _material, const char* _uniformName, const glm::mat4& _param)
+    {
+        int uniform = load_uniform(_material, _uniformName);
+        glUniform4fv(uniform, 16, glm::value_ptr(_param));
     }
 }

@@ -3,7 +3,8 @@
 #include "array.h"
 #include "collection_types.h"
 
-namespace foundation {
+namespace foundation
+{
 
     /// The hash function stores its data in a "list-in-an-array" where
     /// indices are used instead of pointers. 
@@ -67,13 +68,13 @@ namespace foundation {
     namespace hash_internal
     {
         const uint32_t END_OF_LIST = 0xffffffffu;
-        
+
         struct FindResult
         {
             uint32_t hash_i;
             uint32_t data_prev;
             uint32_t data_i;
-        };  
+        };
 
         template<typename T> uint32_t add_entry(Hash<T> &h, uint64_t key)
         {
@@ -179,7 +180,7 @@ namespace foundation {
 
             h._data[i].next = fr.data_i;
             return i;
-        }   
+        }
 
         template<typename T> void find_and_erase(Hash<T> &h, uint64_t key)
         {
@@ -193,9 +194,9 @@ namespace foundation {
             Hash<T> nh(*h._hash._allocator);
             array::resize(nh._hash, new_size);
             array::reserve(nh._data, array::size(h._data));
-            for (uint32_t i=0; i<new_size; ++i)
+            for (uint32_t i = 0; i < new_size; ++i)
                 nh._hash[i] = END_OF_LIST;
-            for (uint32_t i=0; i<array::size(h._data); ++i) {
+            for (uint32_t i = 0; i < array::size(h._data); ++i) {
                 const typename Hash<T>::Entry &e = h._data[i];
                 multi_hash::insert(nh, e.key, e.value);
             }
@@ -334,8 +335,7 @@ namespace foundation {
         }
     }
 
-
-    template <typename T> Hash<T>::Hash(Allocator &a) :
+    template <typename T> inline Hash<T>::Hash(Allocator &a) :
         _hash(a), _data(a)
     {}
 }

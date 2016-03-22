@@ -52,4 +52,5 @@ struct Shader
 struct Material
 {
     uint _programId = 0;
+    foundation::Hash<int>* _uniforms;
 };

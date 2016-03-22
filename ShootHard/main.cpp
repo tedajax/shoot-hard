@@ -1,6 +1,8 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <gl/glew.h>
+#include <glm/matrix.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 #include <memory>
 #include <iostream>
 
@@ -68,6 +70,8 @@ int run()
 
     bool isRunning = true;
 
+    float angle = 0.f;
+
     while (isRunning) {
         SDL_Event event;
         while (SDL_PollEvent(&event)) {
@@ -90,10 +94,18 @@ int run()
             isRunning = false;
         }
 
-        glClearColor(0.f, 1.f, 0.f, 1.f);
+        glClearColor(0.1f, 0.1f, 0.1f, 1.f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         material::use(material);
+
+        angle += 0.01f;
+
+        glm::mat4 projection = glm::perspective(glm::radians, 4.f / 3.f, 0.1f, 100.f);
+        glm::mat4 view = glm::lookAt(glm::vec3(0.f, 0.f, -10.f), glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f, 1.f, 0.f));
+        glm::mat4 model = glm::rotate(glm::mat4(1.f), angle, glm::vec3(0.f, 1.f, 0.f));
+
+        material::set_uniform<glm::mat4>(material, "MVP", projection * view * model);
 
         glEnableVertexAttribArray(0);
         glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
@@ -105,6 +117,8 @@ int run()
 
         input::update();
     }
+
+    material::unload(material);
 
     texture::manager::terminate();
     input::terminate();
