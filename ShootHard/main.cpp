@@ -10,6 +10,8 @@
 #include "input.h"
 #include "sprite.h"
 #include "color.h"
+#include "material.h"
+#include "shader.h"
 
 int run();
 
@@ -59,6 +61,11 @@ int run()
     glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertexData), vertexData, GL_STATIC_DRAW);
 
+    auto vertShader = shader::load("Assets/Shaders/basic.vert", ShaderType::cVertex);
+    auto fragShader = shader::load("Assets/Shaders/basic.frag", ShaderType::cFragment);
+    Material material;
+    material::create(vertShader, fragShader, material);
+
     bool isRunning = true;
 
     while (isRunning) {
@@ -84,7 +91,9 @@ int run()
         }
 
         glClearColor(0.f, 1.f, 0.f, 1.f);
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        material::use(material);
 
         glEnableVertexAttribArray(0);
         glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);

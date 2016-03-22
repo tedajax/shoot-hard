@@ -165,8 +165,10 @@
   <ItemGroup>
     <ClCompile Include="input.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="material.cpp" />
     <ClCompile Include="memory.cpp" />
     <ClCompile Include="murmur_hash.cpp" />
+    <ClCompile Include="shader.cpp" />
     <ClCompile Include="sprite.cpp" />
     <ClCompile Include="string_stream.cpp" />
     <ClCompile Include="foundation_unit_test.cpp" />
@@ -181,11 +183,13 @@
     <ClInclude Include="foundation_unit_test.h" />
     <ClInclude Include="hash.h" />
     <ClInclude Include="input.h" />
+    <ClInclude Include="material.h" />
     <ClInclude Include="math.h" />
     <ClInclude Include="memory.h" />
     <ClInclude Include="memory_types.h" />
     <ClInclude Include="murmur_hash.h" />
     <ClInclude Include="queue.h" />
+    <ClInclude Include="shader.h" />
     <ClInclude Include="snprintf_msvc.h" />
     <ClInclude Include="sprite.h" />
     <ClInclude Include="string_stream.h" />
