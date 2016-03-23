@@ -79,6 +79,6 @@ namespace material
     void set_uniform<glm::mat4>(Material& _material, const char* _uniformName, const glm::mat4& _param)
     {
         int uniform = load_uniform(_material, _uniformName);
-        glUniform4fv(uniform, 16, glm::value_ptr(_param));
+        glUniformMatrix4fv(uniform, 1, GL_FALSE, glm::value_ptr(_param));
     }
 }

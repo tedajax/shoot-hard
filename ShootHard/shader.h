@@ -4,6 +4,6 @@
 
 namespace shader
 {
-    Shader load(const char* _filename, ShaderType _shaderType);
+    bool load(const char* _filename, ShaderType _shaderType, Shader& _shaderOut);
     void unload(Shader& _shader);
 }

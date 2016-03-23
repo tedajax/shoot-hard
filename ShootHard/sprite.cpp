@@ -25,7 +25,7 @@ namespace sprite
     {
         const auto layerLessThanFunc = [](const Sprite* _s1, const Sprite* _s2) {
             return (_s1->layer > _s2->layer) ||
-                (_s1->layer == _s2->layer) && (color::pack(_s1->color) < color::pack(_s2->color));
+                ((_s1->layer == _s2->layer) && (color::pack(_s1->color) < color::pack(_s2->color)));
         };
 
         foundation::array::sort<Sprite>(_sprites, layerLessThanFunc);

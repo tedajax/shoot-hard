@@ -6,15 +6,19 @@
 
 namespace shader
 {
-    Shader load(const char* _filename, ShaderType _shaderType)
+    bool load(const char* _filename, ShaderType _shaderType, Shader& _shaderOut)
     {
         auto glType = (_shaderType == ShaderType::cVertex) ? GL_VERTEX_SHADER : GL_FRAGMENT_SHADER;
         uint shaderId = glCreateShader(glType);
 
         std::string shaderCode;
-        
+
         {
             std::ifstream fileStream(_filename, std::ios::in);
+            if (!fileStream.is_open()) {
+                std::cout << "Unable to open " << _filename << std::endl;
+                return false;
+            }
             fileStream.seekg(0, std::ios::end);
             shaderCode.reserve(fileStream.tellg());
             fileStream.seekg(0, std::ios::beg);
@@ -35,13 +39,14 @@ namespace shader
             glGetShaderInfoLog(shaderId, logLength, nullptr, &errorMessage[0]);
             errorMessage[maxErrorLength - 1] = 0;
             std::cout << &errorMessage[0] << std::endl;
+            return false;
         }
 
         Shader shader;
-        shader._shaderId = shaderId;
-        shader._shaderType = _shaderType;
+        _shaderOut._shaderId = shaderId;
+        _shaderOut._shaderType = _shaderType;
 
-        return shader;
+        return true;
     }
 
     void unload(Shader& _shader)

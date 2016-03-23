@@ -7,11 +7,11 @@ ifeq ($(OS),Windows_NT) # If windows
 	LFLAGS =
 	INCLUDE_FLAGS = -IC:/dev/include
 else
-	SDL_LFLAGS = -lSDL2 -lSDL2_image -lSDL2_ttf
+	SDL_LFLAGS = -lSDL2 -lSDL2_image -lSDL2_ttf -lglew -framework OpenGL
 	CC = clang++
 	STD = c++14
 	POST_BUILD =
-	INCLUDE_FLAGS = -I External/Include
+	INCLUDE_FLAGS =
     SYSTEM_FLAGS =
     PLATFORM_DIR = Posix
 endif

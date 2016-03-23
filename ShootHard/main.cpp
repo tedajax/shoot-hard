@@ -16,6 +16,7 @@
 #include "shader.h"
 
 int run();
+SDL_GLContext create_context(SDL_Window* _window, int _major, int _minor);
 
 int main(int argc, char* argv[])
 {
@@ -32,15 +33,23 @@ int run()
 {
     SDL_Window* window = SDL_CreateWindow("Shoot Hard", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE | SDL_WINDOW_SHOWN);
     SDL_Renderer* renderer = SDL_CreateRenderer(window, 0, SDL_RENDERER_ACCELERATED);
-    
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
-    SDL_GLContext context = SDL_GL_CreateContext(window);
+
+    std::cout << "Creating GL context with version 4.2...\n";
+    SDL_GLContext context = create_context(window, 4, 2);
+
+    if (!context) {
+        std::cout << "Failed, attempting to create context with version 3.2...\n";
+        context = create_context(window, 3, 2);
+    }
+
+    if (!context) {
+        std::cout << "SDL_GL_CreateContext() Error: " << SDL_GetError() << std::endl;
+    }
 
     glewExperimental = GL_TRUE;
     GLenum err = glewInit();
     if (err != GLEW_OK) {
-        std::cout << "Error: " << glewGetErrorString(err) << std::endl;
+        std::cout << "glewInit() Error: " << glewGetErrorString(err) << std::endl;
         std::cin.get();
         return 1;
     }
@@ -63,8 +72,10 @@ int run()
     glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertexData), vertexData, GL_STATIC_DRAW);
 
-    auto vertShader = shader::load("Assets/Shaders/basic.vert", ShaderType::cVertex);
-    auto fragShader = shader::load("Assets/Shaders/basic.frag", ShaderType::cFragment);
+    Shader vertShader, fragShader;
+    shader::load("Assets/Shaders/basic.vert", ShaderType::cVertex, vertShader);
+    shader::load("Assets/Shaders/basic.frag", ShaderType::cFragment, fragShader);
+
     Material material;
     material::create(vertShader, fragShader, material);
 
@@ -102,10 +113,12 @@ int run()
         angle += 0.01f;
 
         glm::mat4 projection = glm::perspective(glm::radians(90.f), 4.f / 3.f, 0.1f, 100.f);
-        glm::mat4 view = glm::lookAt(glm::vec3(0.f, 0.f, -10.f), glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f, 1.f, 0.f));
+        glm::mat4 view = glm::lookAt(glm::vec3(0.f, 0.f, 2.f), glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f, 1.f, 0.f));
         glm::mat4 model = glm::rotate(glm::mat4(1.f), angle, glm::vec3(0.f, 1.f, 0.f));
 
-        material::set_uniform<glm::mat4>(material, "MVP", projection * view * model);
+        auto mvp = projection * view * model;
+
+        material::set_uniform<glm::mat4>(material, "MVP", mvp);
 
         glEnableVertexAttribArray(0);
         glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
@@ -127,4 +140,12 @@ int run()
     SDL_DestroyWindow(window);
 
     return 0;
+}
+
+SDL_GLContext create_context(SDL_Window* _window, int _major, int _minor)
+{
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+    return SDL_GL_CreateContext(_window);
 }
