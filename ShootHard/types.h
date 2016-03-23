@@ -31,10 +31,14 @@ struct Sprite
 
 struct Mesh
 {
-    foundation::Array<glm::vec3> vertices;
-    foundation::Array<glm::vec3> normals;
-    foundation::Array<glm::vec2> uvs;
-    foundation::Array<glm::vec3> colors;
+    foundation::Array<glm::vec3>* vertices;
+    foundation::Array<glm::vec3>* normals;
+    foundation::Array<glm::vec2>* uvs;
+    foundation::Array<glm::vec3>* colors;
+    byte _buffer[sizeof(foundation::Array<glm::vec3>) * 4];
+
+    Mesh();
+    ~Mesh();
 };
 
 enum class ShaderType
