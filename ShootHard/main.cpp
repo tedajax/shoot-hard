@@ -14,6 +14,7 @@
 #include "color.h"
 #include "material.h"
 #include "shader.h"
+#include "mesh.h"
 
 int run();
 SDL_GLContext create_context(SDL_Window* _window, int _major, int _minor);
@@ -61,20 +62,54 @@ int run()
     input::init();
     texture::manager::init(foundation::memory_globals::default_allocator(), renderer);
 
-    static const float32 vertexData[] = {
-        -1.f, -1.f, 0.f,
-        1.f, -1.f, 0.f,
-        0.f, 1.f, 0.f,
-    };
+    Mesh cube;
+    MeshBuffers cubeBuffers;
+    {
+        const int vertCount = 8;
+        float32 halfSize = 0.5f;
+        static const glm::vec3 vertexData[vertCount] = {
+            { -halfSize, halfSize, halfSize },
+            { -halfSize, -halfSize, halfSize },
+            { halfSize, halfSize, halfSize },
+            { halfSize, -halfSize, halfSize },
+            { -halfSize, halfSize, -halfSize },
+            { -halfSize, -halfSize, -halfSize },
+            { halfSize, halfSize, -halfSize },
+            { halfSize, -halfSize, -halfSize },
+        };
 
-    uint vertexBuffer;
-    glGenBuffers(1, &vertexBuffer);
-    glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertexData), vertexData, GL_STATIC_DRAW);
+        const int indexCount = 12 * 3;
+        static const uint32 indexData[indexCount] = {
+            0, 3, 1,
+            0, 2, 3,
 
+            3, 7, 2,
+            6, 7, 2,
+
+            6, 4, 5,
+            6, 5, 7,
+
+            5, 1, 4,
+            4, 0, 1,
+
+            0, 6, 2,
+            0, 4, 6,
+
+            1, 7, 3,
+            1, 5, 7,
+        };
+
+        mesh::set_vertex_data(cube, vertCount, vertexData, nullptr, nullptr, nullptr);
+        mesh::set_indices(cube, indexData, indexCount);
+        
+        cubeBuffers = mesh::create_buffers(cube);
+    }
+    
     Shader vertShader, fragShader;
-    shader::load("Assets/Shaders/basic.vert", ShaderType::cVertex, vertShader);
-    shader::load("Assets/Shaders/basic.frag", ShaderType::cFragment, fragShader);
+    bool vertLoaded = shader::load("Assets/Shaders/basic.vert", ShaderType::cVertex, vertShader);
+    bool fragLoaded = shader::load("Assets/Shaders/basic.frag", ShaderType::cFragment, fragShader);
+
+    ASSERT(vertLoaded && fragLoaded, "");
 
     Material material;
     material::create(vertShader, fragShader, material);
@@ -108,22 +143,31 @@ int run()
         glClearColor(0.1f, 0.1f, 0.1f, 1.f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+        glEnable(GL_DEPTH_TEST);
+        glDepthFunc(GL_LESS);
+
         material::use(material);
 
         angle += 0.01f;
 
-        glm::mat4 projection = glm::ortho(-1.f, 1.f, -1.f, 1.f, 0.1f, 100.f);//glm::perspective(glm::radians(90.f), 4.f / 3.f, 0.1f, 100.f);
-        glm::mat4 view = glm::lookAt(glm::vec3(0.f, 0.f, 2.f), glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f, 1.f, 0.f));
-        glm::mat4 model = glm::rotate(glm::mat4(1.f), angle, glm::vec3(0.f, 1.f, 0.f));
+        auto perspective = glm::perspective(glm::radians(90.f), 4.f / 3.f, 0.1f, 100.f);
+        auto ortho = glm::ortho(-1.f, 1.f, -1.f, 1.f, 0.1f, 100.f);
+        glm::mat4 projection = perspective;
+        glm::mat4 view = glm::lookAt(glm::vec3(0.f, 0.f, 3.f), glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f, 1.f, 0.f));
+        glm::mat4 model = glm::rotate(glm::mat4(1.f), angle, glm::vec3(1.f, 0.1f, 0.f));
 
         auto mvp = projection * view * model;
 
         material::set_uniform<glm::mat4>(material, "MVP", mvp);
 
         glEnableVertexAttribArray(0);
-        glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+        
+        glBindBuffer(GL_ARRAY_BUFFER, cubeBuffers.vertexBuffer);
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+        
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, cubeBuffers.indexBuffer);
+        glDrawElements(GL_TRIANGLES, foundation::array::size(*cube.indices), GL_UNSIGNED_INT, (void*)0);
+
         glDisableVertexAttribArray(0);
 
         SDL_GL_SwapWindow(window);

@@ -16,7 +16,7 @@ namespace foundation {
         /// Returns true if there are any elements in the array.
         template<typename T> bool any(const Array<T> &a);
         /// Returns true if the array is empty.
-        template<typename T> bool empty(const Array<T> &a);
+        template<typename T> bool is_empty(const Array<T> &a);
         
         /// Used to iterate over the array.
         template<typename T> T* begin(Array<T> &a);
@@ -53,13 +53,15 @@ namespace foundation {
         template<typename T> void pop_back(Array<T> &a);
 
         template<typename T> void sort(Array<T>& _a, bool(*_lessThanFunc)(const T* e1, const T* e2));
+
+        template<typename T> void copy_in(Array<T>& _a, const T* _data, uint32 _count);
     }
 
     namespace array
     {
         template<typename T> inline uint32_t size(const Array<T> &a)        {return a._size;}
         template<typename T> inline bool any(const Array<T> &a)             {return a._size != 0;}
-        template<typename T> inline bool empty(const Array<T> &a)           {return a._size == 0;}
+        template<typename T> inline bool is_empty(const Array<T> &a)           {return a._size == 0;}
         
         template<typename T> inline T* begin(Array<T> &a)                   {return a._data;}
         template<typename T> inline const T* begin(const Array<T> &a)       {return a._data;}
@@ -129,6 +131,14 @@ namespace foundation {
         {
             array_sort_count<T>(begin(_a), size(_a), _lessThanFunc);
         }
+
+        template<typename T> void copy_in(Array<T>& _a, const T* _data, uint32 _count)
+        {
+            reserve(_a, _count);
+            for (uint32 i = 0; i < _count; ++i) {
+                push_back(_a, _data[i]);
+            }
+        }
     }
 
     template <typename T>
@@ -137,7 +147,9 @@ namespace foundation {
     template <typename T>
     inline Array<T>::~Array()
     {
-        _allocator->deallocate(_data);
+        if (_data) {
+            _allocator->deallocate(_data);
+        }
     }
 
     template <typename T>

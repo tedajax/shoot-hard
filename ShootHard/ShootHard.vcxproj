@@ -163,10 +163,12 @@
     </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="debug.cpp" />
     <ClCompile Include="input.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="material.cpp" />
     <ClCompile Include="memory.cpp" />
+    <ClCompile Include="mesh.cpp" />
     <ClCompile Include="murmur_hash.cpp" />
     <ClCompile Include="shader.cpp" />
     <ClCompile Include="sprite.cpp" />
@@ -180,6 +182,7 @@
     <ClInclude Include="basictypes.h" />
     <ClInclude Include="collection_types.h" />
     <ClInclude Include="color.h" />
+    <ClInclude Include="debug.h" />
     <ClInclude Include="foundation_unit_test.h" />
     <ClInclude Include="hash.h" />
     <ClInclude Include="input.h" />
@@ -187,6 +190,7 @@
     <ClInclude Include="math.h" />
     <ClInclude Include="memory.h" />
     <ClInclude Include="memory_types.h" />
+    <ClInclude Include="mesh.h" />
     <ClInclude Include="murmur_hash.h" />
     <ClInclude Include="queue.h" />
     <ClInclude Include="shader.h" />

@@ -1,9 +1,12 @@
 #pragma once
 
+#include "debug.h"
 #include "basictypes.h"
 #include "collection_types.h"
+#include "memory_types.h"
 #include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
+#include <glm/vec4.hpp>
 
 struct Color
 {
@@ -31,14 +34,26 @@ struct Sprite
 
 struct Mesh
 {
-    foundation::Array<glm::vec3>* vertices;
-    foundation::Array<glm::vec3>* normals;
-    foundation::Array<glm::vec2>* uvs;
-    foundation::Array<glm::vec3>* colors;
-    byte _buffer[sizeof(foundation::Array<glm::vec3>) * 4];
+    foundation::Array<glm::vec3>* vertices = nullptr;
+    foundation::Array<glm::vec3>* normals = nullptr;
+    foundation::Array<glm::vec2>* uvs = nullptr;
+    foundation::Array<glm::vec4>* colors = nullptr;
+    foundation::Array<uint32>* indices = nullptr;
+
+    byte _buffer[sizeof(foundation::Array<glm::vec3>) * 5];
 
     Mesh();
+    Mesh(foundation::Allocator& _a);
     ~Mesh();
+};
+
+struct MeshBuffers
+{
+    uint vertexBuffer = 0;
+    uint normalBuffer = 0;
+    uint uvBuffer = 0;
+    uint colorBuffer = 0;
+    uint indexBuffer = 0;
 };
 
 enum class ShaderType

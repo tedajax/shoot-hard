@@ -1,3 +1,4 @@
+#include "debug.h"
 #include "queue.h"
 #include "string_stream.h"
 #include "murmur_hash.h"
@@ -14,8 +15,6 @@
 
 #include "foundation_unit_test.h"
 
-#define ASSERT(x) assert(x)
-
 namespace foundation {
     
     void test_memory() {
@@ -23,11 +22,11 @@ namespace foundation {
         Allocator &a = memory_globals::default_allocator();
 
         void *p = a.allocate(100);
-        ASSERT(a.allocated_size(p) >= 100);
-        ASSERT(a.total_allocated() >= 100);
+        ASSERT(a.allocated_size(p) >= 100, "");
+        ASSERT(a.total_allocated() >= 100, "");
         void *q = a.allocate(100);
-        ASSERT(a.allocated_size(q) >= 100);
-        ASSERT(a.total_allocated() >= 200);
+        ASSERT(a.allocated_size(q) >= 100, "");
+        ASSERT(a.total_allocated() >= 200, "");
         
         a.deallocate(p);
         a.deallocate(q);
@@ -42,27 +41,27 @@ namespace foundation {
         {
             Array<int> v(a);
 
-            ASSERT(array::size(v) == 0);
+            ASSERT(array::size(v) == 0, "");
             array::push_back(v, 3);
-            ASSERT(array::size(v) == 1);
-            ASSERT(v[0] == 3);
+            ASSERT(array::size(v) == 1, "");
+            ASSERT(v[0] == 3, "");
 
             Array<int> v2(v);
-            ASSERT(v2[0] == 3);
+            ASSERT(v2[0] == 3, "");
             v2[0] = 5;
-            ASSERT(v[0] == 3);
-            ASSERT(v2[0] == 5);
+            ASSERT(v[0] == 3, "");
+            ASSERT(v2[0] == 5, "");
             v2 = v;
-            ASSERT(v2[0] == 3);
+            ASSERT(v2[0] == 3, "");
             
-            ASSERT(array::end(v) - array::begin(v) == array::size(v));
-            ASSERT(*array::begin(v) == 3);
+            ASSERT(array::end(v) - array::begin(v) == array::size(v), "");
+            ASSERT(*array::begin(v) == 3, "");
             array::pop_back(v);
-            ASSERT(array::empty(v));
+            ASSERT(array::is_empty(v), "");
 
             for (int i=0; i<100; ++i)
                 array::push_back(v, i);
-            ASSERT(array::size(v) == 100);
+            ASSERT(array::size(v) == 100, "");
         }
 
         memory_globals::shutdown();
@@ -107,26 +106,26 @@ namespace foundation {
         {
             TempAllocator128 ta;
             Hash<int> h(ta);
-            ASSERT(hash::get(h,0,99) == 99);
-            ASSERT(!hash::has(h, 0));
+            ASSERT(hash::get(h,0,99) == 99, "");
+            ASSERT(!hash::has(h, 0), "");
             hash::remove(h, 0);
             hash::set(h, 1000, 123);
-            ASSERT(hash::get(h,1000,0) == 123);
-            ASSERT(hash::get(h,2000,99) == 99);
+            ASSERT(hash::get(h,1000,0) == 123, "");
+            ASSERT(hash::get(h,2000,99) == 99, "");
 
             for (int i=0; i<100; ++i)
                 hash::set(h, i, i*i);
             for (int i=0; i<100; ++i)
-                ASSERT(hash::get(h,i,0) == i*i);
+                ASSERT(hash::get(h,i,0) == i*i, "");
             hash::remove(h, 1000);
-            ASSERT(!hash::has(h, 1000));
+            ASSERT(!hash::has(h, 1000), "");
             hash::remove(h, 2000);
-            ASSERT(hash::get(h,1000,0) == 0);
+            ASSERT(hash::get(h,1000,0) == 0, "");
             for (int i=0; i<100; ++i)
-                ASSERT(hash::get(h,i,0) == i*i);
+                ASSERT(hash::get(h,i,0) == i*i, "");
             hash::clear(h);
             for (int i=0; i<100; ++i)
-                ASSERT(!hash::has(h,i));
+                ASSERT(!hash::has(h,i), "");
         }
         memory_globals::shutdown();
     }
@@ -138,22 +137,22 @@ namespace foundation {
             TempAllocator128 ta;
             Hash<int> h(ta);
 
-            ASSERT(multi_hash::count(h, 0) == 0);
+            ASSERT(multi_hash::count(h, 0) == 0, "");
             multi_hash::insert(h, 0, 1);
             multi_hash::insert(h, 0, 2);
             multi_hash::insert(h, 0, 3);
-            ASSERT(multi_hash::count(h, 0) == 3);
+            ASSERT(multi_hash::count(h, 0) == 3, "");
 
             Array<int> a(ta);
             multi_hash::get(h, 0, a);
-            ASSERT(array::size(a) == 3);
+            ASSERT(array::size(a) == 3, "");
             std::sort(array::begin(a), array::end(a));
-            ASSERT(a[0] == 1 && a[1] == 2 && a[2] == 3);
+            ASSERT(a[0] == 1 && a[1] == 2 && a[2] == 3, "");
 
             multi_hash::remove(h, multi_hash::find_first(h, 0));
-            ASSERT(multi_hash::count(h,0) == 2);
+            ASSERT(multi_hash::count(h,0) == 2, "");
             multi_hash::remove_all(h, 0);
-            ASSERT(multi_hash::count(h, 0) == 0);
+            ASSERT(multi_hash::count(h, 0) == 0, "");
         }
         memory_globals::shutdown();
     }
@@ -162,7 +161,7 @@ namespace foundation {
     {
         const char *s = "test_string";
         uint64_t h = murmur_hash_64(s, (uint32_t)strlen(s), 0);
-        ASSERT(h == 0xe604acc23b568f83ull);
+        ASSERT(h == 0xe604acc23b568f83ull, "");
     }
 
     void test_pointer_arithmetic()
@@ -179,7 +178,7 @@ namespace foundation {
         for (unsigned i = 0; i != test_size; ++i) {
             buffer[i] = check;
             char* value = (char*)memory::pointer_add(data, i);
-            ASSERT(*value == buffer[i]);
+            ASSERT(*value == buffer[i], "");
         }
     }
 
@@ -203,7 +202,8 @@ namespace foundation {
                     "----------          ----------\n"
                     "Niklas              2.72\n"
                     "Jim                 3.14\n"
-                )
+                ),
+                ""
             );
         }
         memory_globals::shutdown();
@@ -217,22 +217,22 @@ namespace foundation {
             Queue<int> q(ta);
 
             queue::reserve(q, 10);
-            ASSERT(queue::space(q) == 10);
+            ASSERT(queue::space(q) == 10, "");
             queue::push_back(q, 11);
             queue::push_front(q, 22);
-            ASSERT(queue::size(q) == 2);
-            ASSERT(q[0] == 22);
-            ASSERT(q[1] == 11);
+            ASSERT(queue::size(q) == 2, "");
+            ASSERT(q[0] == 22, "");
+            ASSERT(q[1] == 11, "");
             queue::consume(q, 2);
-            ASSERT(queue::size(q) == 0);
+            ASSERT(queue::size(q) == 0, "");
             int items[] = {1,2,3,4,5,6,7,8,9,10};
             queue::push(q,items,10);
-            ASSERT(queue::size(q) == 10);
+            ASSERT(queue::size(q) == 10, "");
             for (int i=0; i<10; ++i)
-                ASSERT(q[i] == i+1);
+                ASSERT(q[i] == i+1, "");
             queue::consume(q, (uint32_t)(queue::end_front(q) - queue::begin_front(q)));
             queue::consume(q, (uint32_t)(queue::end_front(q) - queue::begin_front(q)));
-            ASSERT(queue::size(q) == 0);
+            ASSERT(queue::size(q) == 0, "");
         }
     }
 
