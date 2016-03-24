@@ -22,4 +22,5 @@ namespace material
 
     template <> void set_uniform<float32>(Material& _material, const char* _uniformName, const float32& _param);
     template <> void set_uniform<glm::mat4>(Material& _material, const char* _uniformName, const glm::mat4& _param);
+    template <> void set_uniform<int>(Material& _material, const char* _uniformName, const int& _param);
 }

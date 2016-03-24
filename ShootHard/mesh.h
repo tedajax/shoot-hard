@@ -10,5 +10,5 @@ namespace mesh
     void create_quad(Mesh& _meshOut, float32 _width = 1.f, float32 _height = 1.f);
     void create_quad(Mesh& _meshOut, const Rectangle& _uvRect, float32 _width = 1.f, float32 _height = 1.f);
 
-    MeshBuffers create_buffers(Mesh& _mesh);
+    MeshInstance create_instance(Mesh& _mesh);
 }

@@ -63,7 +63,7 @@ int run()
     texture::manager::init(foundation::memory_globals::default_allocator(), renderer);
 
     Mesh cube;
-    MeshBuffers cubeBuffers;
+    MeshInstance cubeBuffers;
     {
         const int vertCount = 8;
         float32 halfSize = 0.5f;
@@ -102,8 +102,10 @@ int run()
         mesh::set_vertex_data(cube, vertCount, vertexData, nullptr, nullptr, nullptr);
         mesh::set_indices(cube, indexData, indexCount);
 
-        cubeBuffers = mesh::create_buffers(cube);
+        cubeBuffers = mesh::create_instance(cube);
     }
+
+    Texture characterTexture = texture::get("Assets/p1_stand.png");
 
     Shader vertShader, fragShader;
     bool vertLoaded = shader::load("Assets/Shaders/basic.vert", ShaderType::cVertex, vertShader);
@@ -118,9 +120,14 @@ int run()
 
     float angle = 0.f;
 
-    Mesh quad;
-    mesh::create_quad(quad);
-    MeshBuffers quadBuffers = mesh::create_buffers(quad);
+    Mesh quadMesh;
+    mesh::create_quad(quadMesh);
+    MeshInstance quad = mesh::create_instance(quadMesh);
+
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LESS);
+
+    glEnable(GL_TEXTURE_2D);
 
     while (isRunning) {
         SDL_Event event;
@@ -147,9 +154,6 @@ int run()
         glClearColor(0.1f, 0.1f, 0.1f, 1.f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        glEnable(GL_DEPTH_TEST);
-        glDepthFunc(GL_LESS);
-
         material::use(material);
 
         angle += 0.01f;
@@ -164,17 +168,25 @@ int run()
 
         material::set_uniform<glm::mat4>(material, "MVP", mvp);
 
-        MeshBuffers activeMesh = quadBuffers;
+        MeshInstance activeMesh = quad;
+
+        glActiveTexture(GL_TEXTURE0);
+        SDL_GL_BindTexture(characterTexture._texture, nullptr, nullptr);
+        material::set_uniform<int>(material, "mainTexture", 0);
 
         glEnableVertexAttribArray(0);
-
         glBindBuffer(GL_ARRAY_BUFFER, activeMesh.vertexBuffer);
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+
+        glEnableVertexAttribArray(1);
+        glBindBuffer(GL_ARRAY_BUFFER, activeMesh.uvBuffer);
+        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
 
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, activeMesh.indexBuffer);
         glDrawElements(GL_TRIANGLES, activeMesh.indexCount, GL_UNSIGNED_INT, (void*)0);
 
         glDisableVertexAttribArray(0);
+        glDisableVertexAttribArray(1);
 
         SDL_GL_SwapWindow(window);
 

@@ -47,7 +47,7 @@ struct Mesh
     ~Mesh();
 };
 
-struct MeshBuffers
+struct MeshInstance
 {
     uint vertexBuffer = 0;
     uint normalBuffer = 0;

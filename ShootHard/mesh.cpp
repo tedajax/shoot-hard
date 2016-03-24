@@ -68,40 +68,40 @@ namespace mesh
         set_indices(_meshOut, indices, 6);
     }
 
-    MeshBuffers create_buffers(Mesh& _mesh)
+    MeshInstance create_instance(Mesh& _mesh)
     {
-        MeshBuffers buffers;
+        MeshInstance buffers;
 
-        if (foundation::array::size(*_mesh.vertices) > 0) {
+        if (_mesh.vertices->_size > 0) {
             glGenBuffers(1, &buffers.vertexBuffer);
             glBindBuffer(GL_ARRAY_BUFFER, buffers.vertexBuffer);
-            glBufferData(GL_ARRAY_BUFFER, foundation::array::size(*_mesh.vertices) * sizeof(glm::vec3), &(*_mesh.vertices)[0].x, GL_STATIC_DRAW);
+            glBufferData(GL_ARRAY_BUFFER, _mesh.vertices->_size * sizeof(glm::vec3), &(*_mesh.vertices)[0].x, GL_STATIC_DRAW);
         }
 
-        if (foundation::array::size(*_mesh.normals) > 0) {
+        if (_mesh.normals->_size > 0) {
             glGenBuffers(1, &buffers.normalBuffer);
             glBindBuffer(GL_ARRAY_BUFFER, buffers.normalBuffer);
-            glBufferData(GL_ARRAY_BUFFER, foundation::array::size(*_mesh.normals) * sizeof(glm::vec3), &(*_mesh.normals)[0].x, GL_STATIC_DRAW);
+            glBufferData(GL_ARRAY_BUFFER, _mesh.normals->_size * sizeof(glm::vec3), &(*_mesh.normals)[0].x, GL_STATIC_DRAW);
         }
 
-        if (foundation::array::size(*_mesh.uvs) > 0) {
+        if (_mesh.uvs->_size > 0) {
             glGenBuffers(1, &buffers.uvBuffer);
             glBindBuffer(GL_ARRAY_BUFFER, buffers.uvBuffer);
-            glBufferData(GL_ARRAY_BUFFER, foundation::array::size(*_mesh.uvs) * sizeof(glm::vec2), &(*_mesh.uvs)[0].x, GL_STATIC_DRAW);
+            glBufferData(GL_ARRAY_BUFFER, _mesh.uvs->_size * sizeof(glm::vec2), &(*_mesh.uvs)[0].x, GL_STATIC_DRAW);
         }
 
-        if (foundation::array::size(*_mesh.colors) > 0) {
+        if (_mesh.colors->_size > 0) {
             glGenBuffers(1, &buffers.colorBuffer);
             glBindBuffer(GL_ARRAY_BUFFER, buffers.colorBuffer);
-            glBufferData(GL_ARRAY_BUFFER, foundation::array::size(*_mesh.colors) * sizeof(glm::vec4), &(*_mesh.colors)[0].x, GL_STATIC_DRAW);
+            glBufferData(GL_ARRAY_BUFFER, _mesh.colors->_size * sizeof(glm::vec4), &(*_mesh.colors)[0].x, GL_STATIC_DRAW);
         }
 
-        buffers.indexCount = foundation::array::size(*_mesh.indices);
+        buffers.indexCount = _mesh.indices->_size;
 
         if (buffers.indexCount > 0) {
             glGenBuffers(1, &buffers.indexBuffer);
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers.indexBuffer);
-            glBufferData(GL_ELEMENT_ARRAY_BUFFER, foundation::array::size(*_mesh.indices) * sizeof(uint32), &(*_mesh.indices)[0], GL_STATIC_DRAW);
+            glBufferData(GL_ELEMENT_ARRAY_BUFFER, _mesh.indices->_size * sizeof(uint32), &(*_mesh.indices)[0], GL_STATIC_DRAW);
         }
 
         return buffers;

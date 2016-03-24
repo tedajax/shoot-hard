@@ -81,4 +81,11 @@ namespace material
         int uniform = load_uniform(_material, _uniformName);
         glUniformMatrix4fv(uniform, 1, GL_FALSE, glm::value_ptr(_param));
     }
+
+    template <>
+    void set_uniform<int>(Material& _material, const char* _uniformName, const int& _param)
+    {
+        int uniform = load_uniform(_material, _uniformName);
+        glUniform1i(uniform, _param);
+    }
 }
