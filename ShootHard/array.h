@@ -147,7 +147,7 @@ namespace foundation {
     template <typename T>
     inline Array<T>::~Array()
     {
-        if (_data) {
+        if (_data && _size > 0) {
             _allocator->deallocate(_data);
         }
     }

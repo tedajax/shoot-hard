@@ -64,7 +64,7 @@ namespace {
         ~MallocAllocator() {
             // Check that we don't have any memory leaks when allocator is
             // destroyed.
-            assert(_total_allocated == 0);
+            ASSERT(_total_allocated == 0, "Leaks detected");
         }
 
         virtual void *allocate(uint32_t size, uint32_t align) {

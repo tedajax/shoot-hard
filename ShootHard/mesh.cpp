@@ -35,12 +35,12 @@ namespace mesh
         foundation::array::copy_in(*_mesh.indices, _indices, _count);
     }
 
-    Mesh create_quad(float32 _width /* = 1.f */, float32 _height /* = 1.f */)
+    void create_quad(Mesh& _meshOut, float32 _width /* = 1.f */, float32 _height /* = 1.f */)
     {
-        return create_quad(rectangle::default_uvs(), _width, _height);
+        return create_quad(_meshOut, rectangle::default_uvs(), _width, _height);
     }
 
-    Mesh create_quad(const Rectangle& _uvRect, float32 _width /* = 1.f */, float32 _height /* = 1.f =*/)
+    void create_quad(Mesh& _meshOut, const Rectangle& _uvRect, float32 _width /* = 1.f */, float32 _height /* = 1.f =*/)
     {
         float32 hw = _width / 2.f;
         float32 hh = _height / 2.f;
@@ -64,12 +64,8 @@ namespace mesh
             1, 3, 0,
         };
 
-        Mesh result;
-
-        set_vertex_data(result, 4, vertices, uvs, nullptr, nullptr);
-        set_indices(result, indices, 6);
-
-        return result;
+        set_vertex_data(_meshOut, 4, vertices, uvs, nullptr, nullptr);
+        set_indices(_meshOut, indices, 6);
     }
 
     MeshBuffers create_buffers(Mesh& _mesh)

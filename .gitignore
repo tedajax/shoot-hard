@@ -12,3 +12,4 @@
 *.vcxproj.user
 *.VC.opendb
 /shoot-hard
+/*.dll

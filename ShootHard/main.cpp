@@ -118,7 +118,8 @@ int run()
 
     float angle = 0.f;
 
-    Mesh quad = mesh::create_quad();
+    Mesh quad;
+    mesh::create_quad(quad);
     MeshBuffers quadBuffers = mesh::create_buffers(quad);
 
     while (isRunning) {
