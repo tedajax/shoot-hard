@@ -101,10 +101,10 @@ int run()
 
         mesh::set_vertex_data(cube, vertCount, vertexData, nullptr, nullptr, nullptr);
         mesh::set_indices(cube, indexData, indexCount);
-        
+
         cubeBuffers = mesh::create_buffers(cube);
     }
-    
+
     Shader vertShader, fragShader;
     bool vertLoaded = shader::load("Assets/Shaders/basic.vert", ShaderType::cVertex, vertShader);
     bool fragLoaded = shader::load("Assets/Shaders/basic.frag", ShaderType::cFragment, fragShader);
@@ -117,6 +117,9 @@ int run()
     bool isRunning = true;
 
     float angle = 0.f;
+
+    Mesh quad = mesh::create_quad();
+    MeshBuffers quadBuffers = mesh::create_buffers(quad);
 
     while (isRunning) {
         SDL_Event event;
@@ -160,13 +163,15 @@ int run()
 
         material::set_uniform<glm::mat4>(material, "MVP", mvp);
 
+        MeshBuffers activeMesh = quadBuffers;
+
         glEnableVertexAttribArray(0);
-        
-        glBindBuffer(GL_ARRAY_BUFFER, cubeBuffers.vertexBuffer);
+
+        glBindBuffer(GL_ARRAY_BUFFER, activeMesh.vertexBuffer);
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
-        
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, cubeBuffers.indexBuffer);
-        glDrawElements(GL_TRIANGLES, foundation::array::size(*cube.indices), GL_UNSIGNED_INT, (void*)0);
+
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, activeMesh.indexBuffer);
+        glDrawElements(GL_TRIANGLES, activeMesh.indexCount, GL_UNSIGNED_INT, (void*)0);
 
         glDisableVertexAttribArray(0);
 

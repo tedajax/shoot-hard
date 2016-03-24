@@ -54,6 +54,7 @@ struct MeshBuffers
     uint uvBuffer = 0;
     uint colorBuffer = 0;
     uint indexBuffer = 0;
+    uint32 indexCount = 0;
 };
 
 enum class ShaderType
@@ -72,4 +73,11 @@ struct Material
 {
     uint _programId = 0;
     foundation::Hash<int>* _uniforms;
+};
+
+struct Rectangle
+{
+    glm::vec2 position = glm::vec2(0, 0);
+    float32 width = 0;
+    float32 height = 0;
 };

@@ -1,6 +1,7 @@
 #include "mesh.h"
 #include "array.h"
 #include "memory.h"
+#include "rectangle.h"
 #include <new>
 #include <cassert>
 #include <gl/glew.h>
@@ -34,6 +35,43 @@ namespace mesh
         foundation::array::copy_in(*_mesh.indices, _indices, _count);
     }
 
+    Mesh create_quad(float32 _width /* = 1.f */, float32 _height /* = 1.f */)
+    {
+        return create_quad(rectangle::default_uvs(), _width, _height);
+    }
+
+    Mesh create_quad(const Rectangle& _uvRect, float32 _width /* = 1.f */, float32 _height /* = 1.f =*/)
+    {
+        float32 hw = _width / 2.f;
+        float32 hh = _height / 2.f;
+
+        static const glm::vec3 vertices[4] = {
+            { -hw, hh, 0.f },
+            { hw, hh, 0.f },
+            { -hw, -hh, 0.f },
+            { hw, -hh, 0.f },
+        };
+
+        const glm::vec2 uvs[4] = {
+            { _uvRect.position.x, _uvRect.position.y },
+            { _uvRect.position.x + _uvRect.width, _uvRect.position.y },
+            { _uvRect.position.x, _uvRect.position.y + _uvRect.height },
+            { _uvRect.position.x + _uvRect.width, _uvRect.position.y + _uvRect.height },
+        };
+
+        static const uint32 indices[6] = {
+            0, 3, 2,
+            1, 3, 0,
+        };
+
+        Mesh result;
+
+        set_vertex_data(result, 4, vertices, uvs, nullptr, nullptr);
+        set_indices(result, indices, 6);
+
+        return result;
+    }
+
     MeshBuffers create_buffers(Mesh& _mesh)
     {
         MeshBuffers buffers;
@@ -62,7 +100,9 @@ namespace mesh
             glBufferData(GL_ARRAY_BUFFER, foundation::array::size(*_mesh.colors) * sizeof(glm::vec4), &(*_mesh.colors)[0].x, GL_STATIC_DRAW);
         }
 
-        if (foundation::array::size(*_mesh.indices) > 0) {
+        buffers.indexCount = foundation::array::size(*_mesh.indices);
+
+        if (buffers.indexCount > 0) {
             glGenBuffers(1, &buffers.indexBuffer);
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers.indexBuffer);
             glBufferData(GL_ELEMENT_ARRAY_BUFFER, foundation::array::size(*_mesh.indices) * sizeof(uint32), &(*_mesh.indices)[0], GL_STATIC_DRAW);
