@@ -15,6 +15,7 @@
 #include "material.h"
 #include "shader.h"
 #include "mesh.h"
+#include "camera.h"
 
 int run();
 SDL_GLContext create_context(SDL_Window* _window, int _major, int _minor);
@@ -62,49 +63,6 @@ int run()
     input::init();
     texture::manager::init(foundation::memory_globals::default_allocator(), renderer);
 
-    Mesh cube;
-    MeshInstance cubeBuffers;
-    {
-        const int vertCount = 8;
-        float32 halfSize = 0.5f;
-        static const glm::vec3 vertexData[vertCount] = {
-            { -halfSize, halfSize, halfSize },
-            { -halfSize, -halfSize, halfSize },
-            { halfSize, halfSize, halfSize },
-            { halfSize, -halfSize, halfSize },
-            { -halfSize, halfSize, -halfSize },
-            { -halfSize, -halfSize, -halfSize },
-            { halfSize, halfSize, -halfSize },
-            { halfSize, -halfSize, -halfSize },
-        };
-
-        const int indexCount = 12 * 3;
-        static const uint32 indexData[indexCount] = {
-            0, 3, 1,
-            0, 2, 3,
-
-            3, 7, 2,
-            6, 7, 2,
-
-            6, 4, 5,
-            6, 5, 7,
-
-            5, 1, 4,
-            4, 0, 1,
-
-            0, 6, 2,
-            0, 4, 6,
-
-            1, 7, 3,
-            1, 5, 7,
-        };
-
-        mesh::set_vertex_data(cube, vertCount, vertexData, nullptr, nullptr, nullptr);
-        mesh::set_indices(cube, indexData, indexCount);
-
-        cubeBuffers = mesh::create_instance(cube);
-    }
-
     Texture characterTexture = texture::get("Assets/p1_stand.png");
 
     Shader vertShader, fragShader;
@@ -123,6 +81,17 @@ int run()
     Mesh quadMesh;
     mesh::create_quad(quadMesh);
     MeshInstance quad = mesh::create_instance(quadMesh);
+
+    Camera camera;
+    camera.position = glm::vec3(0.f, 0.f, 3.f);
+    camera.lookAt = glm::vec3(0.f, 0.f, 0.f);
+    camera.up = glm::vec3(0.f, 1.f, 0.f);
+    camera.projectionType = ProjectionType::cOrtho;
+    camera.fov = 90.f;
+    camera.aspectRatio = 4.f / 3.f;
+    camera.nearZ = 0.1f;
+    camera.farZ = 100.f;
+    camera.orthoSize = 1.f;
 
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
@@ -158,10 +127,8 @@ int run()
 
         angle += 0.01f;
 
-        auto perspective = glm::perspective(glm::radians(90.f), 4.f / 3.f, 0.1f, 100.f);
-        auto ortho = glm::ortho(-1.f, 1.f, -1.f, 1.f, 0.1f, 100.f);
-        glm::mat4 projection = perspective;
-        glm::mat4 view = glm::lookAt(glm::vec3(0.f, 0.f, 3.f), glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f, 1.f, 0.f));
+        glm::mat4 projection = camera::projection_matrix(camera);
+        glm::mat4 view = camera::view_matrix(camera);
         glm::mat4 model = glm::rotate(glm::mat4(1.f), angle, glm::vec3(1.f, 0.1f, 0.f));
 
         auto mvp = projection * view * model;

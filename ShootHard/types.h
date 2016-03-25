@@ -7,6 +7,7 @@
 #include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
 #include <glm/vec4.hpp>
+#include <glm/matrix.hpp>
 
 struct Color
 {
@@ -80,4 +81,24 @@ struct Rectangle
     glm::vec2 position = glm::vec2(0, 0);
     float32 width = 0;
     float32 height = 0;
+};
+
+enum class ProjectionType
+{
+    cPerspective,
+    cOrtho,
+};
+
+struct Camera
+{
+    glm::vec3 position;
+    glm::vec3 lookAt;
+    glm::vec3 up;
+
+    ProjectionType projectionType;
+    float32 fov;
+    float32 aspectRatio;
+    float32 orthoSize;
+    float32 nearZ;
+    float32 farZ;
 };
