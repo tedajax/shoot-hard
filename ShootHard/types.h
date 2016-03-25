@@ -8,6 +8,7 @@
 #include <glm/vec3.hpp>
 #include <glm/vec4.hpp>
 #include <glm/matrix.hpp>
+#include <glm/gtc/quaternion.hpp>
 
 struct Color
 {
@@ -91,9 +92,8 @@ enum class ProjectionType
 
 struct Camera
 {
-    glm::vec3 position;
-    glm::vec3 lookAt;
-    glm::vec3 up;
+    glm::vec3 position = glm::vec3(0.f, 0.f, 0.f);
+    glm::quat rotation = glm::quat();
 
     ProjectionType projectionType;
     float32 fov;
