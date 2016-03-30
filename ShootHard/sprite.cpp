@@ -33,17 +33,17 @@ namespace sprite
 
     void render_sprites(SDL_Renderer* _renderer, foundation::Array<Sprite>& _sprites)
     {
-        for (int i = 0, len = foundation::array::size(_sprites); i < len; ++i) {
-            Sprite sprite = _sprites[i];
-            SDL_Rect r = SDL_Rect{
-                (int)sprite.position.x,
-                (int)sprite.position.y,
-                (int)(sprite.scale.x * sprite._texture._width),
-                (int)(sprite.scale.y * sprite._texture._height),
-            };
+        // for (int i = 0, len = foundation::array::size(_sprites); i < len; ++i) {
+        //     Sprite sprite = _sprites[i];
+        //     SDL_Rect r = SDL_Rect{
+        //         (int)sprite.position.x,
+        //         (int)sprite.position.y,
+        //         (int)(sprite.scale.x * sprite._texture._width),
+        //         (int)(sprite.scale.y * sprite._texture._height),
+        //     };
 
-            SDL_SetTextureColorMod(sprite._texture._texture, sprite.color.r, sprite.color.g, sprite.color.b);
-            SDL_RenderCopyEx(_renderer, sprite._texture._texture, nullptr, &r, sprite.rotation, nullptr, SDL_FLIP_NONE);
-        }
+        //     SDL_SetTextureColorMod(sprite._texture._texture, sprite.color.r, sprite.color.g, sprite.color.b);
+        //     SDL_RenderCopyEx(_renderer, sprite._texture._texture, nullptr, &r, sprite.rotation, nullptr, SDL_FLIP_NONE);
+        // }
     }
 }

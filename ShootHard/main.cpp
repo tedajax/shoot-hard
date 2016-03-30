@@ -133,7 +133,7 @@ int run()
         MeshInstance activeMesh = quad;
 
         glActiveTexture(GL_TEXTURE0);
-        SDL_GL_BindTexture(characterTexture._texture, nullptr, nullptr);
+        texture::bind(characterTexture);
         material::set_uniform<int>(material, "mainTexture", 0);
 
         glEnableVertexAttribArray(0);

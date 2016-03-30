@@ -18,4 +18,6 @@ namespace texture
     bool load(Texture& _texture, SDL_Renderer* _renderer, const char* _filename);
     void unload(Texture& _texture);
     Texture get_default();
+
+    void bind(const Texture& _texture);
 }

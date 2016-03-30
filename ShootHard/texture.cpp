@@ -7,6 +7,8 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 
+#include <gl/glew.h>
+
 #include <cstring>
 
 namespace texture
@@ -30,9 +32,7 @@ namespace texture
         void terminate()
         {
             for (auto itr = foundation::array::begin(_textures._table->_data); itr != foundation::array::end(_textures._table->_data); ++itr) {
-                if (itr->value._texture) {
-                    SDL_DestroyTexture(itr->value._texture);
-                }
+                unload(itr->value);
             }
 
             delete _textures._table;
@@ -44,7 +44,7 @@ namespace texture
         uint64 key = foundation::murmur_hash_64(_filename, (uint32)strlen(_filename), 0);
 
         if (foundation::hash::has(*_textures._table, key)) {
-            return foundation::hash::get(*_textures._table, key, get_default());
+            return foundation::hash::get(*_textures._table, key, Texture());
         }
 
         Texture texture;
@@ -52,47 +52,61 @@ namespace texture
             foundation::hash::set(*_textures._table, key, texture);
         }
 
-        return foundation::hash::get(*_textures._table, key, get_default());
+        return foundation::hash::get(*_textures._table, key, Texture());
     }
 
     bool load(Texture& _texture, SDL_Renderer* _renderer, const char* _filename)
     {
-        _texture._texture = nullptr;
-        _texture._width = 0;
-        _texture._height = 0;
-
         SDL_Surface* surface = IMG_Load(_filename);
 
         if (!surface) {
             return false;
         }
 
-        _texture._texture = SDL_CreateTextureFromSurface(_renderer, surface);
+        _texture._width = (float32)surface->w;
+        _texture._height = (float32)surface->h;
+        _texture._pixelCount = surface->w * surface->h;
+        _texture._size = surface->pitch * surface->h;
+        _texture._pixels = new byte[_texture._size];
+
+        // todo: be smarter
+        _texture._format = TextureFormat::cRGBA;
+
+        std::memcpy(_texture._pixels, surface->pixels, _texture._size);
 
         SDL_FreeSurface(surface);
 
-        if (!_texture._texture) {
-            return false;
-        }
+        glGenTextures(1, &_texture._textureId);
 
-        SDL_QueryTexture(_texture._texture, nullptr, nullptr, &_texture._width, &_texture._height);
+        bind(_texture);
+
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, _texture._width, _texture._height, 0, GL_RGBA, GL_UNSIGNED_BYTE, _texture._pixels);
+
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        // todo
+        // generate texture
+        // copy data into gl texture
+        // store stuff
 
         return true;
     }
 
     void unload(Texture& _texture)
     {
-        if (_texture._texture) {
-            SDL_DestroyTexture(_texture._texture);
+        if (_texture._pixels) {
+            delete _texture._pixels;
+        }
+
+        if (_texture._textureId != 0xFFFFFFFF) {
+            // todo delete gl texture
         }
     }
 
-    Texture get_default()
+    void bind(const Texture& _texture)
     {
-        return Texture{
-            nullptr,
-            0,
-            0
-        };
+        if (_texture._textureId != 0xFFFFFFFF) {
+            glBindTexture(GL_TEXTURE_2D, _texture._textureId);
+        }
     }
 }
