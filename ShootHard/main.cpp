@@ -96,6 +96,9 @@ int run()
 
     glEnable(GL_TEXTURE_2D);
 
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
     while (isRunning) {
         SDL_Event event;
         while (SDL_PollEvent(&event)) {
@@ -125,6 +128,9 @@ int run()
 
         glm::mat4 model = glm::mat4();
         glm::mat4 viewProjection = camera::view_projection(camera);
+
+        angle += 0.1f;
+        camera::rotate_angle_axis(camera, 1.f, glm::vec3(0.f, 0.f, -1.f));
 
         auto mvp = viewProjection * model;
 
