@@ -13,3 +13,4 @@
 *.VC.opendb
 /shoot-hard
 /*.dll
+.DS_Store

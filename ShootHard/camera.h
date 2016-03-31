@@ -20,7 +20,7 @@ namespace camera
                 return glm::perspective(glm::radians(_camera.fov), _camera.aspectRatio, _camera.nearZ, _camera.farZ);
 
             case ProjectionType::cOrtho:
-                return glm::ortho(-_camera.orthoSize * _camera.aspectRatio, _camera.orthoSize * _camera.aspectRatio, _camera.orthoSize, -_camera.orthoSize);
+                return glm::ortho(-_camera.orthoSize * _camera.aspectRatio, _camera.orthoSize * _camera.aspectRatio, _camera.orthoSize, -_camera.orthoSize, _camera.nearZ, _camera.farZ);
         }
     }
 

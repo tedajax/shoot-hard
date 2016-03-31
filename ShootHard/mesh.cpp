@@ -72,6 +72,9 @@ namespace mesh
     {
         MeshInstance buffers;
 
+        glGenVertexArrays(1, &buffers.arrayId);
+        glBindVertexArray(buffers.arrayId);
+
         if (_mesh.vertices->_size > 0) {
             glGenBuffers(1, &buffers.vertexBuffer);
             glBindBuffer(GL_ARRAY_BUFFER, buffers.vertexBuffer);

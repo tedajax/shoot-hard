@@ -15,7 +15,6 @@ namespace texture
 {
     struct TextureGlobals
     {
-        SDL_Renderer* renderer = nullptr;
         foundation::Hash<Texture>* _table = nullptr;
     };
 
@@ -23,10 +22,9 @@ namespace texture
 
     namespace manager
     {
-        void init(foundation::Allocator& _textureAlloactor, SDL_Renderer* _renderer)
+        void init(foundation::Allocator& _textureAlloactor)
         {
             _textures._table = new foundation::Hash<Texture>(_textureAlloactor);
-            _textures.renderer = _renderer;
         }
 
         void terminate()
@@ -48,14 +46,14 @@ namespace texture
         }
 
         Texture texture;
-        if (load(texture, _textures.renderer, _filename)) {
+        if (load(texture, _filename)) {
             foundation::hash::set(*_textures._table, key, texture);
         }
 
         return foundation::hash::get(*_textures._table, key, Texture());
     }
 
-    bool load(Texture& _texture, SDL_Renderer* _renderer, const char* _filename)
+    bool load(Texture& _texture, const char* _filename)
     {
         SDL_Surface* surface = IMG_Load(_filename);
 
@@ -99,7 +97,7 @@ namespace texture
         }
 
         if (_texture._textureId != 0xFFFFFFFF) {
-            // todo delete gl texture
+            glDeleteTextures(1, &_texture._textureId);
         }
     }
 

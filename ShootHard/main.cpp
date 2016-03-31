@@ -56,12 +56,8 @@ int run()
         return 1;
     }
 
-    uint vertexArrayId;
-    glGenVertexArrays(1, &vertexArrayId);
-    glBindVertexArray(vertexArrayId);
-
     input::init();
-    texture::manager::init(foundation::memory_globals::default_allocator(), renderer);
+    texture::manager::init(foundation::memory_globals::default_allocator());
 
     Texture characterTexture = texture::get("Assets/p1_stand.png");
 
@@ -84,12 +80,12 @@ int run()
 
     Camera camera;
     camera.position = glm::vec3(0.f, 0.f, 3.f);
-    camera.projectionType = ProjectionType::cPerspective;
+    camera.projectionType = ProjectionType::cOrtho;
     camera.fov = 90.f;
     camera.aspectRatio = 4.f / 3.f;
     camera.nearZ = 0.1f;
     camera.farZ = 100.f;
-    camera.orthoSize = 1.f;
+    camera.orthoSize = 400.f;
 
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
@@ -126,12 +122,13 @@ int run()
 
         material::use(material);
 
-        glm::mat4 model = glm::mat4();
-        glm::mat4 viewProjection = camera::view_projection(camera);
-
         angle += 0.1f;
-        camera::rotate_angle_axis(camera, 1.f, glm::vec3(0.f, 0.f, -1.f));
+        auto translation = glm::translate(glm::mat4(), glm::vec3(angle, 0.f, 0.f));
+        auto rotation = glm::rotate(glm::mat4(), angle, glm::vec3(0.f, 0.f, -1.f));
+        auto scale = glm::scale(glm::mat4(), glm::vec3(68.f, 92.f, 1.f));
+        auto model = translation * rotation * scale;
 
+        auto viewProjection = camera::view_projection(camera);
         auto mvp = viewProjection * model;
 
         material::set_uniform<glm::mat4>(material, "MVP", mvp);

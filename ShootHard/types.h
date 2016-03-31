@@ -77,6 +77,7 @@ struct Mesh
 
 struct MeshInstance
 {
+    uint arrayId = 0;
     uint vertexBuffer = 0;
     uint normalBuffer = 0;
     uint uvBuffer = 0;
@@ -95,6 +96,26 @@ struct Shader
 {
     ShaderType _shaderType;
     uint _shaderId = 0;
+};
+
+enum class VertexAttributeType
+{
+    cPosition,
+    cNormal,
+    cUv0,
+    cUv1,
+    cUv2,
+    cUv3,
+    cColor0,
+    cColor1,
+    cCount,
+};
+
+struct ShaderProgram
+{
+    uint _programId = 0;
+    uint attribSlots[(int)VertexAttributeType::cCount] = { 0 };
+    foundation::Hash<int>* _uniforms;
 };
 
 struct Material
