@@ -123,15 +123,13 @@ int run()
         material::use(material);
 
         angle += 0.1f;
-        auto translation = glm::translate(glm::mat4(), glm::vec3(angle, 0.f, 0.f));
-        auto rotation = glm::rotate(glm::mat4(), angle, glm::vec3(0.f, 0.f, -1.f));
-        auto scale = glm::scale(glm::mat4(), glm::vec3(68.f, 92.f, 1.f));
-        auto model = translation * rotation * scale;
+        glm::mat4 model;
+        math::matrix::trs(glm::vec3(angle, 0.f, 0.f), glm::rotate(glm::quat(), angle, glm::vec3(0.f, 0.f, -1.f)), glm::vec3(68.f, 92.f, 1.f), model);
 
         auto viewProjection = camera::view_projection(camera);
-        auto mvp = viewProjection * model;
 
-        material::set_uniform<glm::mat4>(material, "MVP", mvp);
+        material::set_uniform<glm::mat4>(material, "mxViewProjection", viewProjection);
+        material::set_uniform<glm::mat4>(material, "mxModel", model);
 
         MeshInstance activeMesh = quad;
 
@@ -139,19 +137,14 @@ int run()
         texture::bind(characterTexture);
         material::set_uniform<int>(material, "mainTexture", 0);
 
-        glEnableVertexAttribArray(0);
-        glBindBuffer(GL_ARRAY_BUFFER, activeMesh.vertexBuffer);
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+        mesh::bind(activeMesh);
 
-        glEnableVertexAttribArray(1);
-        glBindBuffer(GL_ARRAY_BUFFER, activeMesh.uvBuffer);
-        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
+        mesh::render(activeMesh);
 
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, activeMesh.indexBuffer);
-        glDrawElements(GL_TRIANGLES, activeMesh.indexCount, GL_UNSIGNED_INT, (void*)0);
+        material::set_uniform<glm::mat4>(material, "mxModel", math::matrix::trs(glm::vec3(100.f, 0.f, 0.f), glm::quat(), glm::vec3(68.f, 92.f, 1.f)));
+        mesh::render(activeMesh);
 
-        glDisableVertexAttribArray(0);
-        glDisableVertexAttribArray(1);
+        mesh::unbind(activeMesh);
 
         SDL_GL_SwapWindow(window);
 

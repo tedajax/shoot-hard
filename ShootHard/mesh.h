@@ -11,4 +11,8 @@ namespace mesh
     void create_quad(Mesh& _meshOut, const Rectangle& _uvRect, float32 _width = 1.f, float32 _height = 1.f);
 
     MeshInstance create_instance(Mesh& _mesh);
+
+    void bind(const MeshInstance& _mesh);
+    void unbind(const MeshInstance& _mesh);
+    void render(const MeshInstance& _mesh);
 }

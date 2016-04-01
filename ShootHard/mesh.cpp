@@ -4,6 +4,7 @@
 #include "rectangle.h"
 #include <new>
 #include <cassert>
+#include <cstdio>
 #include <gl/glew.h>
 
 namespace mesh
@@ -108,6 +109,54 @@ namespace mesh
         }
 
         return buffers;
+    }
+
+    void bind(const MeshInstance& _mesh)
+    {
+        glEnableVertexAttribArray(0);
+        glBindBuffer(GL_ARRAY_BUFFER, _mesh.vertexBuffer);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+
+        if (_mesh.uvBuffer > 0) {
+            glEnableVertexAttribArray(1);
+            glBindBuffer(GL_ARRAY_BUFFER, _mesh.uvBuffer);
+            glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
+        }
+
+        if (_mesh.normalBuffer > 0) {
+            printf("normals\n");
+            glEnableVertexAttribArray(2);
+            glBindBuffer(GL_ARRAY_BUFFER, _mesh.normalBuffer);
+            glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+        }
+
+        if (_mesh.colorBuffer > 0) {
+            printf("colors\n");
+            glEnableVertexAttribArray(3);
+            glBindBuffer(GL_ARRAY_BUFFER, _mesh.colorBuffer);
+            glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, 0, (void*)0);
+        }
+
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _mesh.indexBuffer);
+    }
+
+    void unbind(const MeshInstance& _mesh)
+    {
+        glDisableVertexAttribArray(0);
+        if (_mesh.uvBuffer > 0) {
+            glDisableVertexAttribArray(1);
+        }
+        if (_mesh.normalBuffer > 0) {
+            glDisableVertexAttribArray(2);
+        }
+        if (_mesh.colorBuffer > 0) {
+            glDisableVertexAttribArray(3);
+        }
+    }
+
+    void render(const MeshInstance& _mesh)
+    {
+        glDrawElements(GL_TRIANGLES, _mesh.indexCount, GL_UNSIGNED_INT, (void*)0);
     }
 }
 
