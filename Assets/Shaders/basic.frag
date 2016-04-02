@@ -4,8 +4,14 @@ in vec2 uv;
 
 out vec4 color;
 
-uniform sampler2D mainTexture;
+uniform vec4 ambientLightColor;
+uniform vec4 lightColor;
+uniform vec3 lightDirection;
+uniform float lightPower;
+uniform sampler2D diffuseMap;
+uniform sampler2D normalMap
 
 void main() {
-    color = texture(mainTexture, uv);
+    normal = texture(normalMap, uv);
+    color = texture(diffuseMap, uv);
 }

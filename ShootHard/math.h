@@ -32,6 +32,21 @@ namespace math
 
     namespace matrix
     {
+        inline void trs(const glm::vec2& _translation, const float32& _rotation, const glm::vec2& _scale, glm::mat4& _matrixOut)
+        {
+            auto t = glm::translate(glm::mat4(), glm::vec3(_translation, 0.f));
+            auto r = glm::rotate(glm::mat4(), _rotation, glm::vec3(0.f, 0.f, -1.f));
+            auto s = glm::scale(glm::mat4(), glm::vec3(_scale, 1.f));
+            _matrixOut = t * r * s;
+        }
+
+        inline glm::mat4 trs(const glm::vec2& _translation, const float32& _rotation, const glm::vec2& _scale)
+        {
+            glm::mat4 result;
+            trs(_translation, _rotation, _scale, result);
+            return result;
+        }
+
         inline void trs(const glm::vec3& _translation, const glm::quat& _rotation, const glm::vec3& _scale, glm::mat4& _matrixOut)
         {
             auto t = glm::translate(glm::mat4(), _translation);

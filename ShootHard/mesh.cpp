@@ -53,11 +53,16 @@ namespace mesh
             { hw, -hh, 0.f },
         };
 
+        auto uvLeft = rectangle::left(_uvRect);
+        auto uvRight = rectangle::right(_uvRect);
+        auto uvTop = rectangle::top(_uvRect);
+        auto uvBottom = rectangle::bottom(_uvRect);
+
         const glm::vec2 uvs[4] = {
-            { _uvRect.position.x, _uvRect.position.y },
-            { _uvRect.position.x + _uvRect.width, _uvRect.position.y },
-            { _uvRect.position.x, _uvRect.position.y + _uvRect.height },
-            { _uvRect.position.x + _uvRect.width, _uvRect.position.y + _uvRect.height },
+            { uvLeft, uvBottom },
+            { uvRight, uvBottom },
+            { uvLeft, uvTop },
+            { uvRight, uvTop },
         };
 
         static const uint32 indices[6] = {
@@ -124,14 +129,12 @@ namespace mesh
         }
 
         if (_mesh.normalBuffer > 0) {
-            printf("normals\n");
             glEnableVertexAttribArray(2);
             glBindBuffer(GL_ARRAY_BUFFER, _mesh.normalBuffer);
             glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
         }
 
         if (_mesh.colorBuffer > 0) {
-            printf("colors\n");
             glEnableVertexAttribArray(3);
             glBindBuffer(GL_ARRAY_BUFFER, _mesh.colorBuffer);
             glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, 0, (void*)0);

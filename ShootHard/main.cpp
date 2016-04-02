@@ -122,9 +122,9 @@ int run()
 
         material::use(material);
 
-        angle += 0.1f;
+        //angle += 0.1f;
         glm::mat4 model;
-        math::matrix::trs(glm::vec3(angle, 0.f, 0.f), glm::rotate(glm::quat(), angle, glm::vec3(0.f, 0.f, -1.f)), glm::vec3(68.f, 92.f, 1.f), model);
+        math::matrix::trs(glm::vec2(angle, 0.f), angle, glm::vec2(68.f, 92.f), model);
 
         auto viewProjection = camera::view_projection(camera);
 
@@ -141,7 +141,7 @@ int run()
 
         mesh::render(activeMesh);
 
-        material::set_uniform<glm::mat4>(material, "mxModel", math::matrix::trs(glm::vec3(100.f, 0.f, 0.f), glm::quat(), glm::vec3(68.f, 92.f, 1.f)));
+        material::set_uniform<glm::mat4>(material, "mxModel", math::matrix::trs(glm::vec2(100.f, 0.f), 0.f, glm::vec2(68.f, 92.f)));
         mesh::render(activeMesh);
 
         mesh::unbind(activeMesh);
