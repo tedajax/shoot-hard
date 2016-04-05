@@ -38,6 +38,7 @@ namespace shader
             char errorMessage[maxErrorLength];
             glGetShaderInfoLog(shaderId, logLength, nullptr, &errorMessage[0]);
             errorMessage[maxErrorLength - 1] = 0;
+            std::cout << "Shader compile error: " << _filename << std::endl;
             std::cout << &errorMessage[0] << std::endl;
             return false;
         }

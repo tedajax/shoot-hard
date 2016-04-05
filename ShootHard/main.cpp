@@ -59,7 +59,8 @@ int run()
     input::init();
     texture::manager::init(foundation::memory_globals::default_allocator());
 
-    Texture characterTexture = texture::get("Assets/p1_stand.png");
+    Texture characterDiffuse = texture::get("Assets/p1_stand.png");
+    Texture characterNormal = texture::get("Assets/p1_stand_normal.png");
 
     Shader vertShader, fragShader;
     bool vertLoaded = shader::load("Assets/Shaders/basic.vert", ShaderType::cVertex, vertShader);
@@ -69,6 +70,11 @@ int run()
 
     Material material;
     material::create(vertShader, fragShader, material);
+
+    material::set_uniform<glm::vec4>(material, "ambientLightColor", glm::vec4(0.2f, 0.2f, 0.2f, 1.f));
+    material::set_uniform<glm::vec4>(material, "lightColor", glm::vec4(1.f, 1.f, 1.f, 1.f));
+    material::set_uniform<glm::vec3>(material, "lightDirection", glm::vec3(0.5f, 0.5f, 0.f));
+    material::set_uniform<float32>(material, "lightPower", 0.5f);
 
     bool isRunning = true;
 
@@ -126,16 +132,22 @@ int run()
         glm::mat4 model;
         math::matrix::trs(glm::vec2(angle, 0.f), angle, glm::vec2(68.f, 92.f), model);
 
-        auto viewProjection = camera::view_projection(camera);
+        auto view = camera::view(camera);
+        auto projection = camera::projection(camera);
 
-        material::set_uniform<glm::mat4>(material, "mxViewProjection", viewProjection);
+        material::set_uniform<glm::mat4>(material, "mxView", view);
+        material::set_uniform<glm::mat4>(material, "mxProjection", projection);
         material::set_uniform<glm::mat4>(material, "mxModel", model);
 
         MeshInstance activeMesh = quad;
 
         glActiveTexture(GL_TEXTURE0);
-        texture::bind(characterTexture);
-        material::set_uniform<int>(material, "mainTexture", 0);
+        texture::bind(characterDiffuse);
+        material::set_uniform<int>(material, "diffuseMap", 0);
+
+        glActiveTexture(GL_TEXTURE1);
+        texture::bind(characterNormal);
+        material::set_uniform<int>(material, "normalMap", 1);
 
         mesh::bind(activeMesh);
 

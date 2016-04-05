@@ -9,9 +9,15 @@ uniform vec4 lightColor;
 uniform vec3 lightDirection;
 uniform float lightPower;
 uniform sampler2D diffuseMap;
-uniform sampler2D normalMap
+uniform sampler2D normalMap;
 
 void main() {
-    normal = texture(normalMap, uv);
-    color = texture(diffuseMap, uv);
+    vec3 n = normalize(texture(normalMap, uv).xyz);
+    vec3 d = lightDirection;
+    vec3 l = normalize(lightDirection);
+
+    float cosTheta = clamp(dot(n, l), 0, 1);
+
+    vec4 diffuse = texture(diffuseMap, uv);
+    color = vec4(lightColor.rgb * cosTheta, 1);
 }

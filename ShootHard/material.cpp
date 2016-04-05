@@ -76,6 +76,27 @@ namespace material
     }
 
     template <>
+    void set_uniform<glm::vec2>(Material& _material, const char* _uniformName, const glm::vec2& _param)
+    {
+        int uniform = load_uniform(_material, _uniformName);
+        glUniform2fv(uniform, 2, glm::value_ptr(_param));
+    }
+
+    template <>
+    void set_uniform<glm::vec3>(Material& _material, const char* _uniformName, const glm::vec3& _param)
+    {
+        int uniform = load_uniform(_material, _uniformName);
+        glUniform2fv(uniform, 3, glm::value_ptr(_param));
+    }
+
+    template <>
+    void set_uniform<glm::vec4>(Material& _material, const char* _uniformName, const glm::vec4& _param)
+    {
+        int uniform = load_uniform(_material, _uniformName);
+        glUniform2fv(uniform, 4, glm::value_ptr(_param));
+    }
+
+    template <>
     void set_uniform<glm::mat4>(Material& _material, const char* _uniformName, const glm::mat4& _param)
     {
         int uniform = load_uniform(_material, _uniformName);
