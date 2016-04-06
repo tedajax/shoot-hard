@@ -72,14 +72,15 @@ int run()
     material::create(vertShader, fragShader, material);
 
     material::use(material);
-    // material::set_uniform<glm::vec4>(material, "ambientLightColor", glm::vec4(0.2f, 0.2f, 0.2f, 1.f));
-    material::set_uniform<glm::vec4>(material, "lightColor", glm::vec4(1.f, 1.f, 1.f, 1.f));
+    material::set_uniform<glm::vec3>(material, "ambientLightColor", glm::vec3(0.2f, 0.2f, 0.2f));
+    material::set_uniform<glm::vec3>(material, "lightColor", glm::vec3(1.f, 1.f, 1.f));
     material::set_uniform<glm::vec3>(material, "lightDirection", glm::vec3(0.5f, 0.5f, 0.1f));
     // material::set_uniform<float32>(material, "lightPower", 0.5f);
 
     bool isRunning = true;
 
     float angle = 0.f;
+    float lightAngle = 0.f;
 
     Mesh quadMesh;
     mesh::create_quad(quadMesh);
@@ -128,6 +129,13 @@ int run()
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         material::use(material);
+
+        {
+            lightAngle += 0.1f;
+            float32 lightX = std::cos(lightAngle);
+            float32 lightY = std::sin(lightAngle);
+            material::set_uniform<glm::vec3>(material, "lightDirection", glm::vec3(lightX, lightY, 1.f));
+        }
 
         //angle += 0.1f;
         glm::mat4 model;
