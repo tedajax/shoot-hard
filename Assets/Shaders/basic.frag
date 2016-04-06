@@ -14,10 +14,12 @@ uniform sampler2D normalMap;
 void main() {
     vec3 n = normalize(texture(normalMap, uv).xyz);
     vec3 d = lightDirection;
-    vec3 l = normalize(lightDirection);
+    vec3 l = normalize(d);
 
     float cosTheta = clamp(dot(n, l), 0, 1);
 
+    vec4 directional = lightColor * cosTheta;
+
     vec4 diffuse = texture(diffuseMap, uv);
-    color = vec4(lightColor.rgb * cosTheta, 1);
+    color = vec4(diffuse.rgb * directional.rgb, diffuse.a);
 }

@@ -71,10 +71,11 @@ int run()
     Material material;
     material::create(vertShader, fragShader, material);
 
-    material::set_uniform<glm::vec4>(material, "ambientLightColor", glm::vec4(0.2f, 0.2f, 0.2f, 1.f));
+    material::use(material);
+    // material::set_uniform<glm::vec4>(material, "ambientLightColor", glm::vec4(0.2f, 0.2f, 0.2f, 1.f));
     material::set_uniform<glm::vec4>(material, "lightColor", glm::vec4(1.f, 1.f, 1.f, 1.f));
-    material::set_uniform<glm::vec3>(material, "lightDirection", glm::vec3(0.5f, 0.5f, 0.f));
-    material::set_uniform<float32>(material, "lightPower", 0.5f);
+    material::set_uniform<glm::vec3>(material, "lightDirection", glm::vec3(0.5f, 0.5f, 0.1f));
+    // material::set_uniform<float32>(material, "lightPower", 0.5f);
 
     bool isRunning = true;
 
@@ -123,14 +124,14 @@ int run()
             isRunning = false;
         }
 
-        glClearColor(0.1f, 0.1f, 0.1f, 1.f);
+        glClearColor(0.6f, 0.1f, 0.1f, 1.f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         material::use(material);
 
         //angle += 0.1f;
         glm::mat4 model;
-        math::matrix::trs(glm::vec2(angle, 0.f), angle, glm::vec2(68.f, 92.f), model);
+        math::matrix::trs(glm::vec2(angle, 0.f), angle, glm::vec2(68 * 4.f, 92.f * 4), model);
 
         auto view = camera::view(camera);
         auto projection = camera::projection(camera);
