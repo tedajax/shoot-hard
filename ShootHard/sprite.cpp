@@ -7,7 +7,7 @@ namespace sprite
 {
     void init(Sprite& _sprite, const Texture& _texture, uint32 _layer /* = 0 */)
     {
-        _sprite._texture = _texture;
+        _sprite.texture = _texture;
         _sprite.position = glm::vec2(0.f, 0.f);
         _sprite.rotation = 0.f;
         _sprite.scale = glm::vec2(1.f, 1.f);

@@ -169,7 +169,7 @@ Mesh::Mesh()
 
 Mesh::Mesh(foundation::Allocator& _a)
 {
-    byte* ptr = _buffer;
+    byte* ptr = buffer;
 
     vertices = new (ptr) foundation::Array<glm::vec3>(_a);
     ptr += sizeof(foundation::Array<glm::vec3>);

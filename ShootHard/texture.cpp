@@ -61,24 +61,24 @@ namespace texture
             return false;
         }
 
-        _texture._width = (float32)surface->w;
-        _texture._height = (float32)surface->h;
-        _texture._pixelCount = surface->w * surface->h;
-        _texture._size = surface->pitch * surface->h;
-        _texture._pixels = new byte[_texture._size];
+        _texture.width = (float32)surface->w;
+        _texture.height = (float32)surface->h;
+        _texture.pixelCount = surface->w * surface->h;
+        _texture.size = surface->pitch * surface->h;
+        _texture.pixels = new byte[_texture.size];
 
         // todo: be smarter
-        _texture._format = TextureFormat::cRGBA;
+        _texture.format = TextureFormat::cRGBA;
 
-        std::memcpy(_texture._pixels, surface->pixels, _texture._size);
+        std::memcpy(_texture.pixels, surface->pixels, _texture.size);
 
         SDL_FreeSurface(surface);
 
-        glGenTextures(1, &_texture._textureId);
+        glGenTextures(1, &_texture.textureId);
 
         bind(_texture);
 
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, (int)_texture._width, (int)_texture._height, 0, GL_RGBA, GL_UNSIGNED_BYTE, _texture._pixels);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, (int)_texture.width, (int)_texture.height, 0, GL_RGBA, GL_UNSIGNED_BYTE, _texture.pixels);
 
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -92,19 +92,19 @@ namespace texture
 
     void unload(Texture& _texture)
     {
-        if (_texture._pixels) {
-            delete _texture._pixels;
+        if (_texture.pixels) {
+            delete _texture.pixels;
         }
 
-        if (_texture._textureId != 0xFFFFFFFF) {
-            glDeleteTextures(1, &_texture._textureId);
+        if (_texture.textureId != 0xFFFFFFFF) {
+            glDeleteTextures(1, &_texture.textureId);
         }
     }
 
     void bind(const Texture& _texture)
     {
-        if (_texture._textureId != 0xFFFFFFFF) {
-            glBindTexture(GL_TEXTURE_2D, _texture._textureId);
+        if (_texture.textureId != 0xFFFFFFFF) {
+            glBindTexture(GL_TEXTURE_2D, _texture.textureId);
         }
     }
 }

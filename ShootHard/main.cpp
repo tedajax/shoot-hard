@@ -67,8 +67,12 @@ int run()
 
     ASSERT(vertLoaded && fragLoaded, "");
 
+    ShaderProgram basicProgram;
+    shader::create_program(vertShader, fragShader, basicProgram);
+    shader::ProgramGuard programGuard(basicProgram);
+
     Material material;
-    material::create(vertShader, fragShader, material);
+    material::create(&basicProgram, material);
 
     material::use(material);
 
@@ -138,11 +142,10 @@ int run()
         texture::bind(characterDiffuse);
         material::set_uniform<int>(material, "diffuseMap", 0);
 
-        mesh::bind(activeMesh);
-
-        mesh::render(activeMesh);
-
-        mesh::unbind(activeMesh);
+        {
+            mesh::BindGuard guard(activeMesh);
+            mesh::render(activeMesh);
+        }
 
         SDL_GL_SwapWindow(window);
 
@@ -162,8 +165,8 @@ int run()
 
 SDL_GLContext create_context(SDL_Window* _window, int _major, int _minor)
 {
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, _major);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, _minor);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
     return SDL_GL_CreateContext(_window);
 }

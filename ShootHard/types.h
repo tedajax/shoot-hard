@@ -39,20 +39,20 @@ enum class TextureFilterMode
 
 struct Texture
 {
-    uint32 _textureId = 0xFFFFFFFF;
-    float32 _width = 0.f;
-    float32 _height = 0.f;
-    TextureFormat _format = TextureFormat::cRGBA;
-    TextureWrapMode _wrapMode = TextureWrapMode::cRepeat;
-    TextureFilterMode _filterMode = TextureFilterMode::cNearest;
-    uint32 _size = 0;
-    uint32 _pixelCount = 0;
-    byte* _pixels = nullptr;
+    uint32 textureId = 0xFFFFFFFF;
+    float32 width = 0.f;
+    float32 height = 0.f;
+    TextureFormat format = TextureFormat::cRGBA;
+    TextureWrapMode wrapMode = TextureWrapMode::cRepeat;
+    TextureFilterMode filterMode = TextureFilterMode::cNearest;
+    uint32 size = 0;
+    uint32 pixelCount = 0;
+    byte* pixels = nullptr;
 };
 
 struct Sprite
 {
-    Texture _texture;
+    Texture texture;
     uint32 layer = 0;
     Color color;
     glm::vec2 position;
@@ -68,7 +68,7 @@ struct Mesh
     foundation::Array<glm::vec4>* colors = nullptr;
     foundation::Array<uint32>* indices = nullptr;
 
-    byte _buffer[sizeof(foundation::Array<glm::vec3>) * 5];
+    byte buffer[sizeof(foundation::Array<glm::vec3>) * 5];
 
     Mesh();
     Mesh(foundation::Allocator& _a);
@@ -94,8 +94,8 @@ enum class ShaderType
 
 struct Shader
 {
-    ShaderType _shaderType;
-    uint _shaderId = 0;
+    ShaderType shaderType;
+    uint shaderId = 0;
 };
 
 enum class VertexAttributeType
@@ -113,15 +113,14 @@ enum class VertexAttributeType
 
 struct ShaderProgram
 {
-    uint _programId = 0;
+    uint programId = 0;
     uint attribSlots[(int)VertexAttributeType::cCount] = { 0 };
-    foundation::Hash<int>* _uniforms;
+    foundation::Hash<int>* uniforms;
 };
 
 struct Material
 {
-    uint _programId = 0;
-    foundation::Hash<int>* _uniforms;
+    ShaderProgram* program;
 };
 
 struct Rectangle
@@ -148,4 +147,15 @@ struct Camera
     float32 orthoSize;
     float32 nearZ;
     float32 farZ;
+};
+
+struct RenderId
+{
+    uint64 id;
+    void* data;
+};
+
+struct RenderCommandData
+{
+    uint64 data[8];
 };

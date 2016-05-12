@@ -31,6 +31,7 @@
     <ClCompile Include="sprite.cpp" />
     <ClCompile Include="texture.cpp" />
     <ClCompile Include="camera.cpp" />
+    <ClCompile Include="render.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="temp_allocator.h">
@@ -77,6 +78,8 @@
     <ClInclude Include="texture.h" />
     <ClInclude Include="types.h" />
     <ClInclude Include="camera.h" />
+    <ClInclude Include="render_queue.h" />
+    <ClInclude Include="render.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Assets\Shaders\basic.frag">

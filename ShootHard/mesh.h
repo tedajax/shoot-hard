@@ -15,4 +15,13 @@ namespace mesh
     void bind(const MeshInstance& _mesh);
     void unbind(const MeshInstance& _mesh);
     void render(const MeshInstance& _mesh);
+
+    class BindGuard
+    {
+    public:
+        BindGuard(const MeshInstance& _mesh) : mesh(_mesh) { bind(mesh); }
+        ~BindGuard() { unbind(mesh); }
+    private:
+        const MeshInstance& mesh;
+    };
 }
