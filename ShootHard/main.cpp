@@ -60,7 +60,6 @@ int run()
     texture::manager::init(foundation::memory_globals::default_allocator());
 
     Texture characterDiffuse = texture::get("Assets/p1_stand.png");
-    Texture characterNormal = texture::get("Assets/p1_stand_normal.png");
 
     Shader vertShader, fragShader;
     bool vertLoaded = shader::load("Assets/Shaders/basic.vert", ShaderType::cVertex, vertShader);
@@ -72,15 +71,8 @@ int run()
     material::create(vertShader, fragShader, material);
 
     material::use(material);
-    material::set_uniform<glm::vec3>(material, "ambientLightColor", glm::vec3(0.2f, 0.2f, 0.2f));
-    material::set_uniform<glm::vec3>(material, "lightColor", glm::vec3(1.f, 1.f, 1.f));
-    material::set_uniform<glm::vec3>(material, "lightDirection", glm::vec3(0.5f, 0.5f, 0.1f));
-    // material::set_uniform<float32>(material, "lightPower", 0.5f);
 
     bool isRunning = true;
-
-    float angle = 0.f;
-    float lightAngle = 0.f;
 
     Mesh quadMesh;
     mesh::create_quad(quadMesh);
@@ -130,23 +122,15 @@ int run()
 
         material::use(material);
 
-        {
-            lightAngle += 0.1f;
-            float32 lightX = std::cos(lightAngle);
-            float32 lightY = std::sin(lightAngle);
-            material::set_uniform<glm::vec3>(material, "lightDirection", glm::vec3(lightX, lightY, 1.f));
-        }
-
-        //angle += 0.1f;
         glm::mat4 model;
-        math::matrix::trs(glm::vec2(angle, 0.f), angle, glm::vec2(68 * 4.f, 92.f * 4), model);
+        math::matrix::trs(glm::vec2(0.f, 0.f), 0.f, glm::vec2(68, 92.f), model);
 
         auto view = camera::view(camera);
         auto projection = camera::projection(camera);
 
-        material::set_uniform<glm::mat4>(material, "mxView", view);
-        material::set_uniform<glm::mat4>(material, "mxProjection", projection);
-        material::set_uniform<glm::mat4>(material, "mxModel", model);
+        material::set_uniform<glm::mat4>(material, "viewFrom", view);
+        material::set_uniform<glm::mat4>(material, "projectionFrom", projection);
+        material::set_uniform<glm::mat4>(material, "modelFrom", model);
 
         MeshInstance activeMesh = quad;
 
@@ -154,15 +138,8 @@ int run()
         texture::bind(characterDiffuse);
         material::set_uniform<int>(material, "diffuseMap", 0);
 
-        glActiveTexture(GL_TEXTURE1);
-        texture::bind(characterNormal);
-        material::set_uniform<int>(material, "normalMap", 1);
-
         mesh::bind(activeMesh);
 
-        mesh::render(activeMesh);
-
-        material::set_uniform<glm::mat4>(material, "mxModel", math::matrix::trs(glm::vec2(100.f, 0.f), 0.f, glm::vec2(68.f, 92.f)));
         mesh::render(activeMesh);
 
         mesh::unbind(activeMesh);

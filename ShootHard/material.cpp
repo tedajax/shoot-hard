@@ -65,7 +65,6 @@ namespace material
 
         int location = glGetUniformLocation(_material._programId, _uniformName);
 
-        printf("%d\n", location);
         ASSERTF(location >= 0, "Invalid uniform %s", _uniformName);
 
         foundation::hash::set(*_material._uniforms, key, location);
@@ -83,21 +82,21 @@ namespace material
     void set_uniform<glm::vec2>(Material& _material, const char* _uniformName, const glm::vec2& _param)
     {
         int uniform = load_uniform(_material, _uniformName);
-        glUniform2f(uniform, _param.x, _param.y);
+        glUniform2fv(uniform, 1, glm::value_ptr(_param));
     }
 
     template <>
     void set_uniform<glm::vec3>(Material& _material, const char* _uniformName, const glm::vec3& _param)
     {
         int uniform = load_uniform(_material, _uniformName);
-        glUniform3f(uniform, _param.x, _param.y, _param.z);
+        glUniform3fv(uniform, 1, glm::value_ptr(_param));
     }
 
     template <>
     void set_uniform<glm::vec4>(Material& _material, const char* _uniformName, const glm::vec4& _param)
     {
         int uniform = load_uniform(_material, _uniformName);
-        glUniform4f(uniform, _param.x, _param.y, _param.z, _param.w);
+        glUniform4fv(uniform, 1, glm::value_ptr(_param));
     }
 
     template <>

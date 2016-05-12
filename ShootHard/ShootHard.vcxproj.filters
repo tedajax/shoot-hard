@@ -4,6 +4,9 @@
     <Filter Include="foundation">
       <UniqueIdentifier>{8c196fdc-7bbd-417c-bf71-a1c928d25ecc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shaders">
+      <UniqueIdentifier>{0680faef-6c9f-4807-ad8f-2d2cdadf347e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="foundation_unit_test.cpp">
@@ -27,6 +30,7 @@
     <ClCompile Include="shader.cpp" />
     <ClCompile Include="sprite.cpp" />
     <ClCompile Include="texture.cpp" />
+    <ClCompile Include="camera.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="temp_allocator.h">
@@ -72,5 +76,14 @@
     <ClInclude Include="sprite.h" />
     <ClInclude Include="texture.h" />
     <ClInclude Include="types.h" />
+    <ClInclude Include="camera.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Assets\Shaders\basic.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\Assets\Shaders\basic.vert">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>
