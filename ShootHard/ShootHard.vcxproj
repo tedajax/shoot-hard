@@ -184,7 +184,8 @@
   <ItemGroup>
     <ClInclude Include="algorithm.h" />
     <ClInclude Include="array.h" />
-    <ClInclude Include="basictypes.h" />
+    <ClInclude Include="basic_allocator.h" />
+    <ClInclude Include="basic_types.h" />
     <ClInclude Include="camera.h" />
     <ClInclude Include="collection_types.h" />
     <ClInclude Include="color.h" />
@@ -198,8 +199,10 @@
     <ClInclude Include="memory_types.h" />
     <ClInclude Include="mesh.h" />
     <ClInclude Include="murmur_hash.h" />
+    <ClInclude Include="platform_defines.h" />
     <ClInclude Include="queue.h" />
     <ClInclude Include="rectangle.h" />
+    <ClInclude Include="ref_counted.h" />
     <ClInclude Include="render.h" />
     <ClInclude Include="render_queue.h" />
     <ClInclude Include="shader.h" />

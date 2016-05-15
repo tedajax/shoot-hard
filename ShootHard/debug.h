@@ -1,17 +1,12 @@
 #pragma once
 
+#include "platform_defines.h"
+
 namespace internal
 {
     void print_assert(const char* expr, const char* file, int line, const char* msg);
     void printf_assert(const char* exp, const char* file, int line, const char* fmt, ...);
 }
-
-#ifdef _WIN32
-#define BREAKPOINT() __debugbreak();
-#else
-#include <signal.h>
-#define BREAKPOINT() raise(SIGTRAP);
-#endif
 
 #define MULTILINE_MACRO_BEGIN() do {
 #define MULTILINE_MACRO_END() } while (0);
@@ -19,8 +14,8 @@ namespace internal
 #define ASSERT_ALWAYS(expr, msg) MULTILINE_MACRO_BEGIN()        \
     static bool s_skipAssert = false;                                \
     if (!s_skipAssert && !(expr)) {                                  \
-        internal::print_assert(#expr, __FILE__, __LINE__, msg);     \
-        BREAKPOINT(); \
+        ::internal::print_assert(#expr, __FILE__, __LINE__, msg);     \
+        CORE_BREAKPOINT(); \
     }                                                               \
     MULTILINE_MACRO_END();
 
@@ -28,8 +23,8 @@ namespace internal
 #define ASSERTF_ALWAYS(expr, msg, ...) MULTILINE_MACRO_BEGIN()        \
     static bool s_skipAssert = false;                                \
     if (!s_skipAssert && !(expr)) {                                  \
-        internal::printf_assert(#expr, __FILE__, __LINE__, msg, __VA_ARGS__);     \
-        BREAKPOINT(); \
+        ::internal::printf_assert(#expr, __FILE__, __LINE__, msg, __VA_ARGS__);     \
+        CORE_BREAKPOINT(); \
     }                                                               \
     MULTILINE_MACRO_END();
 

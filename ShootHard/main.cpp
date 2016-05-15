@@ -16,6 +16,7 @@
 #include "shader.h"
 #include "mesh.h"
 #include "camera.h"
+#include "ref_counted.h"
 
 int run();
 SDL_GLContext create_context(SDL_Window* _window, int _major, int _minor);

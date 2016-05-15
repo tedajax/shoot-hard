@@ -7,6 +7,9 @@
     <Filter Include="Shaders">
       <UniqueIdentifier>{0680faef-6c9f-4807-ad8f-2d2cdadf347e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="core">
+      <UniqueIdentifier>{718cbc0e-3bd6-4fb0-b91e-2b80e9d31075}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="foundation_unit_test.cpp">
@@ -21,7 +24,6 @@
     <ClCompile Include="string_stream.cpp">
       <Filter>foundation</Filter>
     </ClCompile>
-    <ClCompile Include="debug.cpp" />
     <ClCompile Include="input.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="material.cpp" />
@@ -32,6 +34,9 @@
     <ClCompile Include="texture.cpp" />
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="render.cpp" />
+    <ClCompile Include="debug.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="temp_allocator.h">
@@ -65,9 +70,7 @@
       <Filter>foundation</Filter>
     </ClInclude>
     <ClInclude Include="algorithm.h" />
-    <ClInclude Include="basictypes.h" />
     <ClInclude Include="color.h" />
-    <ClInclude Include="debug.h" />
     <ClInclude Include="input.h" />
     <ClInclude Include="material.h" />
     <ClInclude Include="math.h" />
@@ -76,10 +79,27 @@
     <ClInclude Include="shader.h" />
     <ClInclude Include="sprite.h" />
     <ClInclude Include="texture.h" />
-    <ClInclude Include="types.h" />
     <ClInclude Include="camera.h" />
     <ClInclude Include="render_queue.h" />
     <ClInclude Include="render.h" />
+    <ClInclude Include="basic_allocator.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="basic_types.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="ref_counted.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="platform_defines.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="debug.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="types.h">
+      <Filter>core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Assets\Shaders\basic.frag">

@@ -1,6 +1,8 @@
 #pragma once
 
 #include <cstdint>
+#include "platform_defines.h"
+#include "basic_allocator.h"
 
 #if defined(_MSC_VER)
 #   define _ALLOW_KEYWORD_MACROS
