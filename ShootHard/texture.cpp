@@ -7,8 +7,6 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 
-#include <gl/glew.h>
-
 #include <cstring>
 
 namespace texture
@@ -16,15 +14,17 @@ namespace texture
     struct TextureGlobals
     {
         foundation::Hash<Texture>* _table = nullptr;
+        SDL_Renderer* _renderer = nullptr;
     };
 
     TextureGlobals _textures;
 
     namespace manager
     {
-        void init(foundation::Allocator& _textureAlloactor)
+        void init(foundation::Allocator& _textureAlloactor, SDL_Renderer* _renderer)
         {
             _textures._table = new foundation::Hash<Texture>(_textureAlloactor);
+            _textures._renderer = _renderer;
         }
 
         void terminate()
@@ -61,50 +61,21 @@ namespace texture
             return false;
         }
 
-        _texture.width = (float32)surface->w;
-        _texture.height = (float32)surface->h;
-        _texture.pixelCount = surface->w * surface->h;
-        _texture.size = surface->pitch * surface->h;
-        _texture.pixels = new byte[_texture.size];
+        _texture._sdlTexture = SDL_CreateTextureFromSurface(_textures._renderer, surface);
 
-        // todo: be smarter
-        _texture.format = TextureFormat::cRGBA;
-
-        std::memcpy(_texture.pixels, surface->pixels, _texture.size);
+        SDL_QueryTexture(_texture._sdlTexture, nullptr, nullptr, &_texture.width, &_texture.height);
 
         SDL_FreeSurface(surface);
-
-        glGenTextures(1, &_texture.textureId);
-
-        bind(_texture);
-
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, (int)_texture.width, (int)_texture.height, 0, GL_RGBA, GL_UNSIGNED_BYTE, _texture.pixels);
-
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        // todo
-        // generate texture
-        // copy data into gl texture
-        // store stuff
 
         return true;
     }
 
     void unload(Texture& _texture)
     {
-        if (_texture.pixels) {
-            delete _texture.pixels;
+        if (_texture._sdlTexture == nullptr) {
+            return;
         }
-
-        if (_texture.textureId != 0xFFFFFFFF) {
-            glDeleteTextures(1, &_texture.textureId);
-        }
-    }
-
-    void bind(const Texture& _texture)
-    {
-        if (_texture.textureId != 0xFFFFFFFF) {
-            glBindTexture(GL_TEXTURE_2D, _texture.textureId);
-        }
+        SDL_DestroyTexture(_texture._sdlTexture);
+        _texture._sdlTexture = nullptr;
     }
 }

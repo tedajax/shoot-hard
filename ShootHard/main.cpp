@@ -1,6 +1,5 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
-#include <gl/glew.h>
 #include <glm/matrix.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <memory>
@@ -37,51 +36,12 @@ int run()
     SDL_Window* window = SDL_CreateWindow("Shoot Hard", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE | SDL_WINDOW_SHOWN);
     SDL_Renderer* renderer = SDL_CreateRenderer(window, 0, SDL_RENDERER_ACCELERATED);
 
-    std::cout << "Creating GL context with version 4.2...\n";
-    SDL_GLContext context = create_context(window, 4, 2);
-
-    if (!context) {
-        std::cout << "Failed, attempting to create context with version 3.2...\n";
-        context = create_context(window, 3, 2);
-    }
-
-    if (!context) {
-        std::cout << "SDL_GL_CreateContext() Error: " << SDL_GetError() << std::endl;
-    }
-
-    glewExperimental = GL_TRUE;
-    GLenum err = glewInit();
-    if (err != GLEW_OK) {
-        std::cout << "glewInit() Error: " << glewGetErrorString(err) << std::endl;
-        std::cin.get();
-        return 1;
-    }
-
     input::init();
-    texture::manager::init(foundation::memory_globals::default_allocator());
+    texture::manager::init(foundation::memory_globals::default_allocator(), renderer);
 
     Texture characterDiffuse = texture::get("Assets/p1_stand.png");
 
-    Shader vertShader, fragShader;
-    bool vertLoaded = shader::load("Assets/Shaders/basic.vert", ShaderType::cVertex, vertShader);
-    bool fragLoaded = shader::load("Assets/Shaders/basic.frag", ShaderType::cFragment, fragShader);
-
-    ASSERT(vertLoaded && fragLoaded, "");
-
-    ShaderProgram basicProgram;
-    shader::create_program(vertShader, fragShader, basicProgram);
-    shader::ProgramGuard programGuard(basicProgram);
-
-    Material material;
-    material::create(&basicProgram, material);
-
-    material::use(material);
-
     bool isRunning = true;
-
-    Mesh quadMesh;
-    mesh::create_quad(quadMesh);
-    MeshInstance quad = mesh::create_instance(quadMesh);
 
     Camera camera;
     camera.position = glm::vec3(0.f, 0.f, 3.f);
@@ -91,14 +51,6 @@ int run()
     camera.nearZ = 0.1f;
     camera.farZ = 100.f;
     camera.orthoSize = 400.f;
-
-    glEnable(GL_DEPTH_TEST);
-    glDepthFunc(GL_LESS);
-
-    glEnable(GL_TEXTURE_2D);
-
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     while (isRunning) {
         SDL_Event event;
@@ -122,38 +74,14 @@ int run()
             isRunning = false;
         }
 
-        glClearColor(0.6f, 0.1f, 0.1f, 1.f);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+        SDL_RenderClear(renderer);
 
-        material::use(material);
+        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+        SDL_RenderCopy(renderer, characterDiffuse._sdlTexture, nullptr, nullptr);
 
-        glm::mat4 model;
-        math::matrix::trs(glm::vec2(0.f, 0.f), 0.f, glm::vec2(68, 92.f), model);
-
-        auto view = camera::view(camera);
-        auto projection = camera::projection(camera);
-
-        material::set_uniform<glm::mat4>(material, "viewFrom", view);
-        material::set_uniform<glm::mat4>(material, "projectionFrom", projection);
-        material::set_uniform<glm::mat4>(material, "modelFrom", model);
-
-        MeshInstance activeMesh = quad;
-
-        glActiveTexture(GL_TEXTURE0);
-        texture::bind(characterDiffuse);
-        material::set_uniform<int>(material, "diffuseMap", 0);
-
-        {
-            mesh::BindGuard guard(activeMesh);
-            mesh::render(activeMesh);
-        }
-
-        SDL_GL_SwapWindow(window);
-
-        input::update();
+        SDL_RenderPresent(renderer);
     }
-
-    material::unload(material);
 
     texture::manager::terminate();
     input::terminate();

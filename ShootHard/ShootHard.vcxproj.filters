@@ -37,6 +37,7 @@
     <ClCompile Include="debug.cpp">
       <Filter>core</Filter>
     </ClCompile>
+    <ClCompile Include="resource.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="temp_allocator.h">
@@ -100,6 +101,7 @@
     <ClInclude Include="types.h">
       <Filter>core</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Assets\Shaders\basic.frag">

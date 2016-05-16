@@ -175,6 +175,7 @@
     <ClCompile Include="murmur_hash.cpp" />
     <ClCompile Include="rectangle.cpp" />
     <ClCompile Include="render.cpp" />
+    <ClCompile Include="resource.cpp" />
     <ClCompile Include="shader.cpp" />
     <ClCompile Include="sprite.cpp" />
     <ClCompile Include="string_stream.cpp" />
@@ -205,6 +206,7 @@
     <ClInclude Include="ref_counted.h" />
     <ClInclude Include="render.h" />
     <ClInclude Include="render_queue.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="shader.h" />
     <ClInclude Include="sprite.h" />
     <ClInclude Include="string_stream.h" />

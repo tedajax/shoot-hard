@@ -15,39 +15,12 @@ struct Color
     uint8 a = 255, r = 255, g = 255, b = 255;
 };
 
-enum class TextureFormat
-{
-    cRGBA,
-    cARGB,
-    cRGB,
-    cRG,
-    cR,
-};
-
-enum class TextureWrapMode
-{
-    cRepeat,
-    cClamp,
-};
-
-enum class TextureFilterMode
-{
-    cNearest,
-    cBilinear,
-    cTrilinear,
-};
-
+struct SDL_Texture;
 struct Texture
 {
-    uint32 textureId = 0xFFFFFFFF;
-    float32 width = 0.f;
-    float32 height = 0.f;
-    TextureFormat format = TextureFormat::cRGBA;
-    TextureWrapMode wrapMode = TextureWrapMode::cRepeat;
-    TextureFilterMode filterMode = TextureFilterMode::cNearest;
-    uint32 size = 0;
-    uint32 pixelCount = 0;
-    byte* pixels = nullptr;
+    SDL_Texture* _sdlTexture = nullptr;
+    int width;
+    int height;
 };
 
 struct Sprite
