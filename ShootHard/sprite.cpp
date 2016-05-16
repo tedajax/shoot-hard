@@ -12,6 +12,8 @@ namespace sprite
         _sprite.rotation = 0.f;
         _sprite.scale = glm::vec2(1.f, 1.f);
         _sprite.layer = _layer;
+
+        SDL_QueryTexture(_sprite.texture._sdlTexture, nullptr, nullptr, &_sprite.width, &_sprite.height);
     }
 
     Sprite create(const Texture& _texture, uint32 _layer /* = 0 */)
@@ -33,17 +35,17 @@ namespace sprite
 
     void render_sprites(SDL_Renderer* _renderer, foundation::Array<Sprite>& _sprites)
     {
-        // for (int i = 0, len = foundation::array::size(_sprites); i < len; ++i) {
-        //     Sprite sprite = _sprites[i];
-        //     SDL_Rect r = SDL_Rect{
-        //         (int)sprite.position.x,
-        //         (int)sprite.position.y,
-        //         (int)(sprite.scale.x * sprite._texture._width),
-        //         (int)(sprite.scale.y * sprite._texture._height),
-        //     };
+         for (int i = 0, len = foundation::array::size(_sprites); i < len; ++i) {
+             Sprite sprite = _sprites[i];
+             SDL_Rect r = SDL_Rect{
+                 (int)sprite.position.x,
+                 (int)sprite.position.y,
+                 (int)(sprite.scale.x * sprite.width),
+                 (int)(sprite.scale.y * sprite.height),
+             };
 
-        //     SDL_SetTextureColorMod(sprite._texture._texture, sprite.color.r, sprite.color.g, sprite.color.b);
-        //     SDL_RenderCopyEx(_renderer, sprite._texture._texture, nullptr, &r, sprite.rotation, nullptr, SDL_FLIP_NONE);
-        // }
+             SDL_SetTextureColorMod(sprite.texture._sdlTexture, sprite.color.r, sprite.color.g, sprite.color.b);
+             SDL_RenderCopyEx(_renderer, sprite.texture._sdlTexture, nullptr, &r, sprite.rotation, nullptr, SDL_FLIP_NONE);
+         }
     }
 }

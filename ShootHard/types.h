@@ -19,14 +19,14 @@ struct SDL_Texture;
 struct Texture
 {
     SDL_Texture* _sdlTexture = nullptr;
-    int width;
-    int height;
 };
 
 struct Sprite
 {
     Texture texture;
     uint32 layer = 0;
+    int width;
+    int height;
     Color color;
     glm::vec2 position;
     float32 rotation;
