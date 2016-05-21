@@ -91,6 +91,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;opengl32.lib;glew32d.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -109,6 +110,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;opengl32.lib;glew32d.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -129,6 +131,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -150,6 +153,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -168,19 +172,18 @@
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="debug.cpp" />
     <ClCompile Include="input.cpp" />
+    <ClCompile Include="logger.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="material.cpp" />
     <ClCompile Include="memory.cpp" />
-    <ClCompile Include="mesh.cpp" />
     <ClCompile Include="murmur_hash.cpp" />
     <ClCompile Include="rectangle.cpp" />
-    <ClCompile Include="render.cpp" />
+    <ClCompile Include="renderer.cpp" />
     <ClCompile Include="resource.cpp" />
-    <ClCompile Include="shader.cpp" />
     <ClCompile Include="sprite.cpp" />
     <ClCompile Include="string_stream.cpp" />
     <ClCompile Include="foundation_unit_test.cpp" />
     <ClCompile Include="texture.cpp" />
+    <ClCompile Include="window.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="algorithm.h" />
@@ -194,20 +197,18 @@
     <ClInclude Include="foundation_unit_test.h" />
     <ClInclude Include="hash.h" />
     <ClInclude Include="input.h" />
-    <ClInclude Include="material.h" />
+    <ClInclude Include="logger.h" />
     <ClInclude Include="math.h" />
     <ClInclude Include="memory.h" />
     <ClInclude Include="memory_types.h" />
-    <ClInclude Include="mesh.h" />
     <ClInclude Include="murmur_hash.h" />
     <ClInclude Include="platform_defines.h" />
     <ClInclude Include="queue.h" />
     <ClInclude Include="rectangle.h" />
     <ClInclude Include="ref_counted.h" />
-    <ClInclude Include="render.h" />
+    <ClInclude Include="renderer.h" />
     <ClInclude Include="render_queue.h" />
     <ClInclude Include="resource.h" />
-    <ClInclude Include="shader.h" />
     <ClInclude Include="sprite.h" />
     <ClInclude Include="string_stream.h" />
     <ClInclude Include="temp_allocator.h" />
@@ -217,6 +218,7 @@
   <ItemGroup>
     <None Include="..\Assets\Shaders\basic.frag" />
     <None Include="..\Assets\Shaders\basic.vert" />
+    <None Include="window.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

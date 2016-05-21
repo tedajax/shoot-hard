@@ -1,5 +1,6 @@
 #include "texture.h"
 #include "hash.h"
+#include "logger.h"
 
 #include "memory.h"
 #include "murmur_hash.h"
@@ -21,10 +22,10 @@ namespace texture
 
     namespace manager
     {
-        void init(foundation::Allocator& _textureAlloactor, SDL_Renderer* _renderer)
+        void init(foundation::Allocator& _textureAlloactor, const Renderer& _renderer)
         {
             _textures._table = new foundation::Hash<Texture>(_textureAlloactor);
-            _textures._renderer = _renderer;
+            _textures._renderer = _renderer._sdlRenderer;
         }
 
         void terminate()
@@ -58,6 +59,7 @@ namespace texture
         SDL_Surface* surface = IMG_Load(_filename);
 
         if (!surface) {
+            logger::error("Texture", "Unable to open texture %s", _filename);
             return false;
         }
 

@@ -15,6 +15,7 @@ namespace foundation
     /// Dynamically resizable array of POD objects.
     template<typename T> struct Array
     {
+        Array();
         Array(Allocator &a);
         ~Array();
         Array(const Array &other);
@@ -32,6 +33,7 @@ namespace foundation
     /// A double-ended queue/ring buffer.
     template <typename T> struct Queue
     {
+        Queue();
         Queue(Allocator &a);
 
         T &operator[](uint32_t i);
@@ -46,7 +48,7 @@ namespace foundation
     /// object, use a hash function to map that object to an uint64_t.
     template<typename T> struct Hash
     {
-    public:
+        Hash();
         Hash(Allocator &a);
         
         struct Entry {

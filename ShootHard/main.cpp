@@ -11,11 +11,11 @@
 #include "input.h"
 #include "sprite.h"
 #include "color.h"
-#include "material.h"
-#include "shader.h"
-#include "mesh.h"
 #include "camera.h"
 #include "ref_counted.h"
+#include "window.h"
+#include "renderer.h"
+#include "logger.h"
 
 int run();
 SDL_GLContext create_context(SDL_Window* _window, int _major, int _minor);
@@ -33,8 +33,13 @@ int main(int argc, char* argv[])
 
 int run()
 {
-    SDL_Window* window = SDL_CreateWindow("Shoot Hard", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE | SDL_WINDOW_SHOWN);
-    SDL_Renderer* renderer = SDL_CreateRenderer(window, 0, SDL_RENDERER_ACCELERATED);
+    logger::init();
+
+    Window window;
+    window::init(window, "Shoot Hard", 800, 600, WindowStyle::cWindowed);
+
+    Renderer renderer;
+    renderer::init(renderer, window, foundation::memory_globals::default_allocator());
 
     input::init();
     texture::manager::init(foundation::memory_globals::default_allocator(), renderer);
@@ -74,20 +79,22 @@ int run()
             isRunning = false;
         }
 
-        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-        SDL_RenderClear(renderer);
+        renderer::set_draw_color(renderer, color::create(0, 0, 0, 255));
+        renderer::clear(renderer);
 
-        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-        SDL_RenderCopy(renderer, characterDiffuse._sdlTexture, nullptr, nullptr);
+        renderer::set_draw_color(renderer, color::create(255, 255, 255, 255));
+        renderer::copy(renderer, characterDiffuse, nullptr, nullptr);
 
-        SDL_RenderPresent(renderer);
+        renderer::present(renderer);
     }
+
 
     texture::manager::terminate();
     input::terminate();
+    renderer::shutdown(renderer);
+    window::shutdown(window);
 
-    SDL_DestroyRenderer(renderer);
-    SDL_DestroyWindow(window);
+    logger::shutdown();
 
     return 0;
 }

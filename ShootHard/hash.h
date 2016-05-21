@@ -14,6 +14,8 @@ namespace foundation
 
     namespace hash
     {
+        template <typename T> void init(Hash<T> &h, foundation::Allocator& alloc);
+
         /// Returns true if the specified key exists in the hash.
         template<typename T> bool has(const Hash<T> &h, uint64_t key);
 
@@ -222,6 +224,12 @@ namespace foundation
 
     namespace hash
     {
+        template <typename T> void init(Hash<T> &h, foundation::Allocator& alloc)
+        {
+            foundation::array::init(h._data, alloc);
+            foundation::array::init(h._hash, alloc);
+        }
+
         template<typename T> bool has(const Hash<T> &h, uint64_t key)
         {
             return hash_internal::find_or_fail(h, key) != hash_internal::END_OF_LIST;
@@ -334,6 +342,10 @@ namespace foundation
                 hash::remove(h, key);
         }
     }
+
+    template <typename T> inline Hash<T>::Hash()
+        : _hash(), _data()
+    { }
 
     template <typename T> inline Hash<T>::Hash(Allocator &a) :
         _hash(a), _data(a)

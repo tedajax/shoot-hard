@@ -11,6 +11,8 @@
 namespace foundation {
     namespace array
     {
+        template <typename T> void init(Array<T> &a, foundation::Allocator& alloc);
+
         /// The number of elements in the array.
         template<typename T> uint32_t size(const Array<T> &a) ;
         /// Returns true if there are any elements in the array.
@@ -59,6 +61,12 @@ namespace foundation {
 
     namespace array
     {
+        template <typename T> void init(Array<T> &a, foundation::Allocator& alloc)
+        {
+            ASSERT(a._allocator == nullptr, "Array has already been initialized or non-default constructor was used.");
+            a._allocator = &alloc;
+        }
+
         template<typename T> inline uint32_t size(const Array<T> &a)        {return a._size;}
         template<typename T> inline bool any(const Array<T> &a)             {return a._size != 0;}
         template<typename T> inline bool is_empty(const Array<T> &a)           {return a._size == 0;}
@@ -142,12 +150,17 @@ namespace foundation {
     }
 
     template <typename T>
+    inline Array<T>::Array()
+        : _allocator(nullptr), _size(0), _capacity(0), _data(nullptr)
+    { }
+
+    template <typename T>
     inline Array<T>::Array(Allocator &allocator) : _allocator(&allocator), _size(0), _capacity(0), _data(0) {}
 
     template <typename T>
     inline Array<T>::~Array()
     {
-        if (_data && _size > 0) {
+        if (_allocator && _data && _size > 0) {
             _allocator->deallocate(_data);
         }
     }

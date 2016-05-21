@@ -14,3 +14,5 @@
 /shoot-hard
 /*.dll
 .DS_Store
+/ShootHard/Assets
+/ShootHard/logs

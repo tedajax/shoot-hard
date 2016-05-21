@@ -8,7 +8,7 @@ namespace texture
 {
     namespace manager
     {
-        void init(foundation::Allocator& _textureAlloactor, SDL_Renderer* _renderer);
+        void init(foundation::Allocator& _textureAlloactor, const Renderer& _renderer);
         void terminate();
     }
 

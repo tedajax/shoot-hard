@@ -19,88 +19,25 @@ struct SDL_Texture;
 struct Texture
 {
     SDL_Texture* _sdlTexture = nullptr;
+    int width;
+    int height;
 };
 
 struct Sprite
 {
     Texture texture;
     uint32 layer = 0;
-    int width;
-    int height;
     Color color;
     glm::vec2 position;
     float32 rotation;
     glm::vec2 scale;
 };
 
-struct Mesh
-{
-    foundation::Array<glm::vec3>* vertices = nullptr;
-    foundation::Array<glm::vec3>* normals = nullptr;
-    foundation::Array<glm::vec2>* uvs = nullptr;
-    foundation::Array<glm::vec4>* colors = nullptr;
-    foundation::Array<uint32>* indices = nullptr;
-
-    byte buffer[sizeof(foundation::Array<glm::vec3>) * 5];
-
-    Mesh();
-    Mesh(foundation::Allocator& _a);
-    ~Mesh();
-};
-
-struct MeshInstance
-{
-    uint arrayId = 0;
-    uint vertexBuffer = 0;
-    uint normalBuffer = 0;
-    uint uvBuffer = 0;
-    uint colorBuffer = 0;
-    uint indexBuffer = 0;
-    uint32 indexCount = 0;
-};
-
-enum class ShaderType
-{
-    cVertex,
-    cFragment
-};
-
-struct Shader
-{
-    ShaderType shaderType;
-    uint shaderId = 0;
-};
-
-enum class VertexAttributeType
-{
-    cPosition,
-    cNormal,
-    cUv0,
-    cUv1,
-    cUv2,
-    cUv3,
-    cColor0,
-    cColor1,
-    cCount,
-};
-
-struct ShaderProgram
-{
-    uint programId = 0;
-    uint attribSlots[(int)VertexAttributeType::cCount] = { 0 };
-    foundation::Hash<int>* uniforms;
-};
-
-struct Material
-{
-    ShaderProgram* program;
-};
-
 struct Rectangle
 {
-    glm::vec2 position = glm::vec2(0, 0);
-    float32 width = 0;
-    float32 height = 0;
+    glm::vec2 position;
+    float32 width;
+    float32 height;
 };
 
 enum class ProjectionType
@@ -122,13 +59,37 @@ struct Camera
     float32 farZ;
 };
 
-struct RenderId
+struct RenderCommand
 {
-    uint64 id;
-    void* data;
+    Sprite sprite;
 };
 
-struct RenderCommandData
+enum class RenderBuckets
 {
-    uint64 data[8];
+    cGameLayer,
+    cHudLayer,
+    cCount,
+};
+
+struct SDL_Renderer;
+struct Renderer
+{
+    SDL_Renderer* _sdlRenderer = nullptr;
+    foundation::Queue<RenderCommand>* _renderBuckets[(int)RenderBuckets::cCount];
+};
+
+enum class WindowStyle
+{
+    cWindowed,
+    cFullscreen,
+    cBorderlessWindow,
+};
+
+struct SDL_Window;
+struct Window
+{
+    SDL_Window* _sdlWindow = nullptr;
+    WindowStyle _style = WindowStyle::cWindowed;
+    int _width = 0;
+    int _height = 0;
 };

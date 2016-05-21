@@ -1,3 +1,5 @@
+#pragma once
+
 #include "collection_types.h"
 #include "array.h"
 
@@ -5,6 +7,8 @@ namespace foundation
 {
     namespace queue 
     {
+        template <typename T> void init(Queue<T> &q, foundation::Allocator& alloc);
+
         /// Returns the number of items in the queue.
         template <typename T> uint32_t size(const Queue<T> &q);
         /// Returns the ammount of free space in the queue/ring buffer.
@@ -65,6 +69,11 @@ namespace foundation
 
     namespace queue 
     {
+        template <typename T> inline void init(Queue<T> &q, foundation::Allocator& alloc)
+        {
+            foundation::array::init(q._data, alloc);
+        }
+
         template<typename T> inline uint32_t size(const Queue<T> &q)
         {
             return q._size;
@@ -150,6 +159,11 @@ namespace foundation
             return end > array::size(q._data) ? array::end(q._data) : array::begin(q._data) + end;
         }
     }
+
+    template <typename T>
+    inline Queue<T>::Queue()
+        : _data(), _size(0), _offset(0)
+    { }
 
     template <typename T> inline Queue<T>::Queue(Allocator &allocator) : _data(allocator), _size(0), _offset(0) {}
 

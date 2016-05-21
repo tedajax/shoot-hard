@@ -2,9 +2,11 @@
 
 #include "types.h"
 
+struct SDL_Rect;
 namespace rectangle
 {
     Rectangle default_uvs();
+    void make_sdl_rect(const Rectangle* _rectangle, SDL_Rect** _sdlRect);
 
     inline float32 top(const Rectangle& _rectangle)
     {

@@ -12,8 +12,6 @@ namespace sprite
         _sprite.rotation = 0.f;
         _sprite.scale = glm::vec2(1.f, 1.f);
         _sprite.layer = _layer;
-
-        SDL_QueryTexture(_sprite.texture._sdlTexture, nullptr, nullptr, &_sprite.width, &_sprite.height);
     }
 
     Sprite create(const Texture& _texture, uint32 _layer /* = 0 */)
@@ -40,8 +38,8 @@ namespace sprite
              SDL_Rect r = SDL_Rect{
                  (int)sprite.position.x,
                  (int)sprite.position.y,
-                 (int)(sprite.scale.x * sprite.width),
-                 (int)(sprite.scale.y * sprite.height),
+                 (int)(sprite.scale.x * sprite.texture.width),
+                 (int)(sprite.scale.y * sprite.texture.height),
              };
 
              SDL_SetTextureColorMod(sprite.texture._sdlTexture, sprite.color.r, sprite.color.g, sprite.color.b);
