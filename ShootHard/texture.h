@@ -16,4 +16,6 @@ namespace texture
 
     bool load(Texture& _texture, const char* _filename);
     void unload(Texture& _texture);
+
+    void set_color(Texture& _texture, const Color& _color);
 }

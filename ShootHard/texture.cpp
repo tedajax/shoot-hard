@@ -80,4 +80,9 @@ namespace texture
         SDL_DestroyTexture(_texture._sdlTexture);
         _texture._sdlTexture = nullptr;
     }
+
+    void set_color(Texture& _texture, const Color& _color)
+    {
+        SDL_SetTextureColorMod(_texture._sdlTexture, _color.r, _color.g, _color.b);
+    }
 }

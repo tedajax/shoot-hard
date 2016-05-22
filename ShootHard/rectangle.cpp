@@ -26,4 +26,12 @@ namespace rectangle
         (*_sdlRect)->w = (int)_rectangle->width;
         (*_sdlRect)->h = (int)_rectangle->height;
     }
+
+    void create_from_transform(const Transform& _transform, float32 _width, float32 _height, Rectangle& _out)
+    {
+        _out.position.x = _transform.position.x;
+        _out.position.y = _transform.position.y;
+        _out.width = _width * _transform.scale.x;
+        _out.height = _height * _transform.scale.y;
+    }
 }

@@ -29,6 +29,10 @@ namespace internal
 
 template <typename T> inline void array_sort_count(T* _data, uint32 _count, bool(*_lessThanFunc)(const T* e1, const T* e2))
 {
+    if (_count == 0) {
+        return;
+    }
+
     uint32 i = _count / 2;
     while (i-- > 0) {
         internal::array_sort_section(_data, i, _count, _lessThanFunc);

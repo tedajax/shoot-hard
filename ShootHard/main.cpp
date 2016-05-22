@@ -16,6 +16,7 @@
 #include "window.h"
 #include "renderer.h"
 #include "logger.h"
+#include "transform.h"
 
 int run();
 SDL_GLContext create_context(SDL_Window* _window, int _major, int _minor);
@@ -45,6 +46,11 @@ int run()
     texture::manager::init(foundation::memory_globals::default_allocator(), renderer);
 
     Texture characterDiffuse = texture::get("Assets/p1_stand.png");
+    Sprite character;
+    character.texture = characterDiffuse;
+    character.layer = 0;
+    character.color = color::create(255, 255, 255, 255);
+    character.origin = glm::vec2(0.5f, 0.5f);
 
     bool isRunning = true;
 
@@ -56,6 +62,9 @@ int run()
     camera.nearZ = 0.1f;
     camera.farZ = 100.f;
     camera.orthoSize = 400.f;
+
+    int frames = 0;
+    bool doFrames = false;
 
     while (isRunning) {
         SDL_Event event;
@@ -79,13 +88,29 @@ int run()
             isRunning = false;
         }
 
+        if (input::get_key_down(SDL_SCANCODE_SPACE)) {
+            doFrames = true;
+        }
+
         renderer::set_draw_color(renderer, color::create(0, 0, 0, 255));
         renderer::clear(renderer);
 
         renderer::set_draw_color(renderer, color::create(255, 255, 255, 255));
-        renderer::copy(renderer, characterDiffuse, nullptr, nullptr);
 
-        renderer::present(renderer);
+        for (int i = 0; i < 250; ++i) {
+            Transform t = transform::identity();
+            t.position.x = i * 5 + sin((float32)frames / (240 + i)) * 120;
+            t.position.y = i * 4 + cos((float32)frames / (240 + i)) * 120;
+            t.scale.x += i * 0.01f;
+            character.layer = i;
+            character.color.r = frames / 60 + i;
+            character.color.g = frames / 120 + i;
+            character.color.b = frames / 240 + i;
+            renderer::add_draw_call(renderer, RenderBuckets::cGameLayer, character, t);
+        }
+
+        renderer::render(renderer);
+        if (doFrames) ++frames;
     }
 
 

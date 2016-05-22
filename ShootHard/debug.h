@@ -34,7 +34,7 @@ namespace internal
 #define ASSERTF ASSERTF_ALWAYS
 #define IS_DEBUG 1
 #else
-#define IF_DEBUG(x) ((void)0);
+#define IF_DEBUG(x)
 #define ASSERT(expr, msg) ((void)0)
 #define ASSERTF(expr, msg, ...) ((void)0)
 #define IS_DEBUG 0

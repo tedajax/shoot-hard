@@ -9,6 +9,8 @@ namespace renderer
 
     void set_draw_color(Renderer& _renderer, const Color& _color);
     void clear(Renderer& _renderer);
-    void copy(Renderer& _renderer, const Texture& _texture, const Rectangle* _srcRect, const Rectangle* _destRect);
-    void present(Renderer& _renderer);
+    void render(Renderer& _renderer);
+
+    void add_draw_call(Renderer& _renderer, RenderBuckets bucket, const Sprite& _sprite, const Transform& _transform);
+    void render_sprite(Renderer& _renderer, Sprite& _sprite, const Transform& _transform);
 }

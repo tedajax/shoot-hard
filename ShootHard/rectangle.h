@@ -7,6 +7,7 @@ namespace rectangle
 {
     Rectangle default_uvs();
     void make_sdl_rect(const Rectangle* _rectangle, SDL_Rect** _sdlRect);
+    void create_from_transform(const Transform& _transform, float32 _width, float32 _height, Rectangle& _out);
 
     inline float32 top(const Rectangle& _rectangle)
     {

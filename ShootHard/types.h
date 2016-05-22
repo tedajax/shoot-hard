@@ -27,10 +27,15 @@ struct Sprite
 {
     Texture texture;
     uint32 layer = 0;
+    glm::vec2 origin;
     Color color;
+};
+
+struct Transform
+{
     glm::vec2 position;
-    float32 rotation;
     glm::vec2 scale;
+    float32 rotation;
 };
 
 struct Rectangle
@@ -59,9 +64,10 @@ struct Camera
     float32 farZ;
 };
 
-struct RenderCommand
+struct RenderCall
 {
     Sprite sprite;
+    Transform transform;
 };
 
 enum class RenderBuckets
@@ -75,7 +81,7 @@ struct SDL_Renderer;
 struct Renderer
 {
     SDL_Renderer* _sdlRenderer = nullptr;
-    foundation::Queue<RenderCommand>* _renderBuckets[(int)RenderBuckets::cCount];
+    foundation::Array<RenderCall>* _renderBuckets[(int)RenderBuckets::cCount];
 };
 
 enum class WindowStyle
