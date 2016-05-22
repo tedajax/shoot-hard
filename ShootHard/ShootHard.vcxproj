@@ -182,6 +182,7 @@
     <ClCompile Include="renderer.cpp" />
     <ClCompile Include="resource.cpp" />
     <ClCompile Include="sprite.cpp" />
+    <ClCompile Include="sprite_system.cpp" />
     <ClCompile Include="string_stream.cpp" />
     <ClCompile Include="foundation_unit_test.cpp" />
     <ClCompile Include="texture.cpp" />
@@ -198,12 +199,14 @@
     <ClInclude Include="collection_types.h" />
     <ClInclude Include="color.h" />
     <ClInclude Include="component.h" />
+    <ClInclude Include="component_entity.h" />
     <ClInclude Include="component_types.h" />
     <ClInclude Include="debug.h" />
     <ClInclude Include="entity.h" />
     <ClInclude Include="foundation_unit_test.h" />
     <ClInclude Include="hash.h" />
     <ClInclude Include="platform.h" />
+    <ClInclude Include="sprite_system.h" />
     <ClInclude Include="system.h" />
     <ClInclude Include="input.h" />
     <ClInclude Include="logger.h" />

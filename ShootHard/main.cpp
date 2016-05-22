@@ -17,28 +17,28 @@
 #include "renderer.h"
 #include "logger.h"
 #include "transform.h"
-#include "system.h"
-#include "component_types.h"
 #include "platform.h"
+#include "component_entity.h"
 
 int run();
 SDL_GLContext create_context(SDL_Window* _window, int _major, int _minor);
 
 int main(int argc, char* argv[])
 {
+    logger::init();
     core::init();
     int result = run();
     core::shutdown();
+    logger::shutdown();
 
     return result;
 }
 
 int run()
 {
-    logger::init();
 
     Window window;
-    window::init(window, "Shoot Hard", 1920, 1080, WindowStyle::cBorderlessWindow);
+    window::init(window, "Shoot Hard", 1280, 720, WindowStyle::cWindowed);
 
     Renderer renderer;
     renderer::init(renderer, window, foundation::memory_globals::default_allocator());
@@ -62,28 +62,27 @@ int run()
     camera.farZ = 100.f;
     camera.orthoSize = 400.f;
 
-    int frames = 0;
-    bool doFrames = false;
-
     System<TransformComponent> transformSystem(foundation::memory_globals::default_allocator());
     System<SpriteComponent> spriteSystem(foundation::memory_globals::default_allocator());
 
+    component_entity::register_system(&transformSystem);
+    component_entity::register_system(&spriteSystem);
+
     EntityId entity = entity::create();
-    auto xformId = aspect_system::add_component<TransformComponent>(transformSystem, entity);
-    auto spriteId = aspect_system::add_component<SpriteComponent>(spriteSystem, entity);
 
-    {
-        auto transformHandle = aspect_system::get_component_on_entity(transformSystem, entity);
-        auto xform = transformHandle.get();
-        xform->transform.position.x = 5;
+    for (int i = 0; i < 10; ++i) {
+        EntityId entity = entity::create();
 
-        auto spriteHandle = aspect_system::get_component_on_entity(spriteSystem, entity);
+        auto xformId = component_entity::add_component<TransformComponent>(entity);
+        auto spriteId = component_entity::add_component<SpriteComponent>(entity);
+
+        auto xformHandle = component_entity::get_component_handle<TransformComponent>(xformId);
+        auto spriteHandle = component_entity::get_component_handle<SpriteComponent>(spriteId);
+
+        xformHandle.get()->transform.position.x = i * 16;
+        xformHandle.get()->transform.position.y = i * 9;
+
         spriteHandle.get()->sprite = character;
-    }
-
-    {
-        auto transformHandle = aspect_system::get_component(transformSystem, xformId);
-        transformHandle.get()->transform.position.y = 10;
     }
 
     while (isRunning) {
@@ -108,29 +107,12 @@ int run()
             isRunning = false;
         }
 
-        if (input::get_key_down(SDL_SCANCODE_SPACE)) {
-            doFrames = true;
-        }
-
         renderer::set_draw_color(renderer, color::create(0, 0, 0, 255));
         renderer::clear(renderer);
 
-        renderer::set_draw_color(renderer, color::create(255, 255, 255, 255));
-
-        for (int i = 0; i < 500; ++i) {
-            Transform t = transform::identity();
-            t.position.x = i * 8.f + sin((float32)frames / (240 + i)) * 240;
-            t.position.y = i * 4.5f + cos((float32)frames / (240 + i)) * 240;
-            t.scale.x += i * 0.01f;
-            character.layer = i;
-            character.color.r = frames / 60 + i;
-            character.color.g = frames / 120 + i;
-            character.color.b = frames / 240 + i;
-            renderer::add_draw_call(renderer, RenderBuckets::cGameLayer, character, t);
-        }
+        sprite_system::render(spriteSystem, renderer);
 
         renderer::render(renderer);
-        if (doFrames) ++frames;
     }
 
 
@@ -138,8 +120,6 @@ int run()
     input::terminate();
     renderer::shutdown(renderer);
     window::shutdown(window);
-
-    logger::shutdown();
 
     return 0;
 }

@@ -30,7 +30,7 @@ struct System
     ComponentId _currentId;
 };
 
-namespace aspect_system
+namespace core_system
 {
     template <typename T_COMPONENT>
     ComponentId add_component(System<T_COMPONENT>& _system, EntityId _entity)
@@ -101,7 +101,7 @@ namespace aspect_system
     }
 
     template <typename T_COMPONENT>
-    ComponentHandle<T_COMPONENT> get_component_on_entity(System<T_COMPONENT>& _system, EntityId _entity)
+    ComponentHandle<T_COMPONENT> get_component(System<T_COMPONENT>& _system, EntityId _entity)
     {
         ComponentHandle<T_COMPONENT> find;
         auto predicate = [_entity](ComponentHandle<T_COMPONENT>* handle) -> bool {
@@ -123,7 +123,7 @@ namespace aspect_system
     }
 
     template <typename T_COMPONENT>
-    ComponentHandle<T_COMPONENT> get_component(System<T_COMPONENT>& _system, ComponentId _componentId)
+    ComponentHandle<T_COMPONENT> get_component_handle(System<T_COMPONENT>& _system, ComponentId _componentId)
     {
         ComponentHandle<T_COMPONENT> find;
         auto predicate = [=](ComponentHandle<T_COMPONENT>* handle) -> bool {

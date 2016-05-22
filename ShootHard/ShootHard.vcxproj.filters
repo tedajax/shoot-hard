@@ -13,6 +13,12 @@
     <Filter Include="core\Win">
       <UniqueIdentifier>{bcca59ac-dea2-4abe-86db-c0d8fe734118}</UniqueIdentifier>
     </Filter>
+    <Filter Include="component_entity">
+      <UniqueIdentifier>{afdc507f-b6af-4517-b422-9f4722b188ba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="component_entity\systems">
+      <UniqueIdentifier>{4ff2ffbc-d369-40fc-bbdc-2305d6a68d8d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="foundation_unit_test.cpp">
@@ -43,12 +49,17 @@
       <Filter>core</Filter>
     </ClCompile>
     <ClCompile Include="transform.cpp" />
-    <ClCompile Include="entity.cpp" />
     <ClCompile Include="Win\win_platform.cpp">
       <Filter>core\Win</Filter>
     </ClCompile>
     <ClCompile Include="platform.cpp">
       <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="entity.cpp">
+      <Filter>component_entity</Filter>
+    </ClCompile>
+    <ClCompile Include="sprite_system.cpp">
+      <Filter>component_entity\systems</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -115,12 +126,26 @@
       <Filter>core</Filter>
     </ClInclude>
     <ClInclude Include="transform.h" />
-    <ClInclude Include="component.h" />
-    <ClInclude Include="system.h" />
-    <ClInclude Include="entity.h" />
-    <ClInclude Include="component_types.h" />
     <ClInclude Include="platform.h">
       <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="component.h">
+      <Filter>component_entity</Filter>
+    </ClInclude>
+    <ClInclude Include="component_types.h">
+      <Filter>component_entity</Filter>
+    </ClInclude>
+    <ClInclude Include="entity.h">
+      <Filter>component_entity</Filter>
+    </ClInclude>
+    <ClInclude Include="system.h">
+      <Filter>component_entity</Filter>
+    </ClInclude>
+    <ClInclude Include="sprite_system.h">
+      <Filter>component_entity\systems</Filter>
+    </ClInclude>
+    <ClInclude Include="component_entity.h">
+      <Filter>component_entity</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
