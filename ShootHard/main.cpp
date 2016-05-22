@@ -39,7 +39,7 @@ int run()
     logger::init();
 
     Window window;
-    window::init(window, "Shoot Hard", 800, 600, WindowStyle::cWindowed);
+    window::init(window, "Shoot Hard", 1920, 1080, WindowStyle::cBorderlessWindow);
 
     Renderer renderer;
     renderer::init(renderer, window, foundation::memory_globals::default_allocator());
@@ -69,18 +69,23 @@ int run()
     bool doFrames = false;
 
     System<TransformComponent> transformSystem(foundation::memory_globals::default_allocator());
+    System<SpriteComponent> spriteSystem(foundation::memory_globals::default_allocator());
 
     EntityId entity = entity::create();
-    auto componentId = aspect_system::add_component<TransformComponent>(transformSystem, entity);
+    auto xformId = aspect_system::add_component<TransformComponent>(transformSystem, entity);
+    auto spriteId = aspect_system::add_component<SpriteComponent>(spriteSystem, entity);
 
     {
         auto transformHandle = aspect_system::get_component_on_entity(transformSystem, entity);
         auto xform = transformHandle.get();
         xform->transform.position.x = 5;
+
+        auto spriteHandle = aspect_system::get_component_on_entity(spriteSystem, entity);
+        spriteHandle.get()->sprite = character;
     }
 
     {
-        auto transformHandle = aspect_system::get_component(transformSystem, componentId);
+        auto transformHandle = aspect_system::get_component(transformSystem, xformId);
         transformHandle.get()->transform.position.y = 10;
     }
 
@@ -115,10 +120,10 @@ int run()
 
         renderer::set_draw_color(renderer, color::create(255, 255, 255, 255));
 
-        for (int i = 0; i < 250; ++i) {
+        for (int i = 0; i < 500; ++i) {
             Transform t = transform::identity();
-            t.position.x = i * 5 + sin((float32)frames / (240 + i)) * 120;
-            t.position.y = i * 4 + cos((float32)frames / (240 + i)) * 120;
+            t.position.x = i * 8.f + sin((float32)frames / (240 + i)) * 240;
+            t.position.y = i * 4.5f + cos((float32)frames / (240 + i)) * 240;
             t.scale.x += i * 0.01f;
             character.layer = i;
             character.color.r = frames / 60 + i;
