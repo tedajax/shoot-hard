@@ -7,8 +7,11 @@
 #include <Windows.h>
 #include <ShlObj.h>
 
+#pragma warning (push)
+#pragma warning (disable : 4091) // ignore warning about typedefs in struct declarations
 #include <DbgHelp.h>
 #pragma comment(lib, "dbghelp.lib")
+#pragma warning (pop)
 
 #include <Rpc.h>
 #pragma comment(lib, "Rpcrt4.lib")
@@ -19,7 +22,28 @@ using namespace foundation::string_stream;
 
 namespace core
 {
-    std::mutex g_format_trace_mutex;
+
+    namespace internal
+    {
+        std::mutex g_formatStackTraceMutex;
+
+        bool g_symInitialized = false;
+    }
+
+    void internal::init_platform()
+    {
+        if (!g_symInitialized) {
+            SymSetOptions(SYMOPT_LOAD_LINES | SYMOPT_INCLUDE_32BIT_MODULES | SYMOPT_UNDNAME);
+            SymInitialize(GetCurrentProcess(), NULL, TRUE);
+            g_symInitialized = true;
+        }
+    }
+
+    void internal::shutdown_platform()
+    {
+        SymCleanup(GetCurrentProcess());
+        g_symInitialized = false;
+    }
 
     void get_stack_trace(StackTrace& _stackTraceOut, int _skipAmount /* = 1 */, int _maxAmount /* = cMaxStackTraceSize */)
     {
@@ -31,7 +55,7 @@ namespace core
 
     void format_stack_trace(const StackTrace& _stackTrace, Buffer& _bufferOut)
     {
-        std::lock_guard<std::mutex> lock(g_format_trace_mutex);
+        std::lock_guard<std::mutex> lock(internal::g_formatStackTraceMutex);
 
 #ifdef DBGHELP_TRANSLATE_TCHAR
 #error Wide dbghelp is not supported.
@@ -47,7 +71,6 @@ namespace core
         DWORD displacement;
 
         HANDLE process = GetCurrentProcess();
-        SymInitialize(process, nullptr, TRUE);
 
         const int numFrames = (int)_stackTrace._size;
 

@@ -177,6 +177,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="memory.cpp" />
     <ClCompile Include="murmur_hash.cpp" />
+    <ClCompile Include="platform.cpp" />
     <ClCompile Include="rectangle.cpp" />
     <ClCompile Include="renderer.cpp" />
     <ClCompile Include="resource.cpp" />

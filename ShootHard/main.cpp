@@ -19,17 +19,16 @@
 #include "transform.h"
 #include "system.h"
 #include "component_types.h"
+#include "platform.h"
 
 int run();
 SDL_GLContext create_context(SDL_Window* _window, int _major, int _minor);
 
 int main(int argc, char* argv[])
 {
-    foundation::memory_globals::init();
-
+    core::init();
     int result = run();
-
-    foundation::memory_globals::shutdown();
+    core::shutdown();
 
     return result;
 }
@@ -49,10 +48,8 @@ int run()
 
     Texture characterDiffuse = texture::get("Assets/p1_stand.png");
     Sprite character;
-    character.texture = characterDiffuse;
-    character.layer = 0;
-    character.color = color::create(255, 255, 255, 255);
-    character.origin = glm::vec2(0.5f, 0.5f);
+    sprite::init(character, characterDiffuse);
+    character.color = color::cWhite;
 
     bool isRunning = true;
 

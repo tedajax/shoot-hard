@@ -47,6 +47,9 @@
     <ClCompile Include="Win\win_platform.cpp">
       <Filter>core\Win</Filter>
     </ClCompile>
+    <ClCompile Include="platform.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="temp_allocator.h">

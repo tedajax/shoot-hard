@@ -27,7 +27,7 @@ struct Sprite
 {
     Texture texture;
     uint32 layer = 0;
-    glm::vec2 origin;
+    glm::vec2 origin = glm::vec2(0.5f, 0.5f);
     Color color;
 };
 
