@@ -17,6 +17,8 @@
 #include "renderer.h"
 #include "logger.h"
 #include "transform.h"
+#include "system.h"
+#include "component_types.h"
 
 int run();
 SDL_GLContext create_context(SDL_Window* _window, int _major, int _minor);
@@ -65,6 +67,22 @@ int run()
 
     int frames = 0;
     bool doFrames = false;
+
+    System<TransformComponent> transformSystem(foundation::memory_globals::default_allocator());
+
+    EntityId entity = entity::create();
+    auto componentId = aspect_system::add_component<TransformComponent>(transformSystem, entity);
+
+    {
+        auto transformHandle = aspect_system::get_component_on_entity(transformSystem, entity);
+        auto xform = transformHandle.get();
+        xform->transform.position.x = 5;
+    }
+
+    {
+        auto transformHandle = aspect_system::get_component(transformSystem, componentId);
+        transformHandle.get()->transform.position.y = 10;
+    }
 
     while (isRunning) {
         SDL_Event event;

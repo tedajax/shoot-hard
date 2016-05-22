@@ -43,4 +43,20 @@ namespace color
             (uint8)(_packedColor & 0x000000FF)
         );
     }
+
+    const static Color cClear = create(255, 255, 255, 0);
+
+    const static Color cWhite = create(255, 255, 255, 255);
+    const static Color cBlack = create(0, 0, 0, 255);
+    const static Color cGrey = create(127, 127, 127, 255);
+    const static Color cLightGrey = create(191, 191, 191, 255);
+    const static Color cDarkGrey = create(63, 63, 63, 255);
+
+    const static Color cRed = create(255, 0, 0, 255);
+    const static Color cBlue = create(0, 255, 0, 255);
+    const static Color cGreen = create(0, 0, 255, 255);
+
+    const static Color cCyan = create(0, 255, 255, 255);
+    const static Color cMagenta = create(255, 0, 255, 255);
+    const static Color cYellow = create(255, 255, 0, 255);
 }

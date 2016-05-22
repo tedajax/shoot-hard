@@ -27,3 +27,11 @@ typedef double float64;
 
 typedef uint8 byte;
 typedef unsigned int uint;
+
+#if defined(CORE_IS_32_BIT)
+typedef int32_t mem_int;
+typedef uint32_t mem_uint;
+#elif defined(CORE_IS_64_BIT)
+typedef int64_t mem_int;
+typedef uint64_t mem_uint;
+#endif

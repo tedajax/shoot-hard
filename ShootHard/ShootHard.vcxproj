@@ -171,6 +171,7 @@
   <ItemGroup>
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="debug.cpp" />
+    <ClCompile Include="entity.cpp" />
     <ClCompile Include="input.cpp" />
     <ClCompile Include="logger.cpp" />
     <ClCompile Include="main.cpp" />
@@ -185,6 +186,7 @@
     <ClCompile Include="texture.cpp" />
     <ClCompile Include="transform.cpp" />
     <ClCompile Include="window.cpp" />
+    <ClCompile Include="Win\win_platform.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="algorithm.h" />
@@ -194,9 +196,14 @@
     <ClInclude Include="camera.h" />
     <ClInclude Include="collection_types.h" />
     <ClInclude Include="color.h" />
+    <ClInclude Include="component.h" />
+    <ClInclude Include="component_types.h" />
     <ClInclude Include="debug.h" />
+    <ClInclude Include="entity.h" />
     <ClInclude Include="foundation_unit_test.h" />
     <ClInclude Include="hash.h" />
+    <ClInclude Include="platform.h" />
+    <ClInclude Include="system.h" />
     <ClInclude Include="input.h" />
     <ClInclude Include="logger.h" />
     <ClInclude Include="math.h" />

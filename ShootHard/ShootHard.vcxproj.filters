@@ -10,6 +10,9 @@
     <Filter Include="core">
       <UniqueIdentifier>{718cbc0e-3bd6-4fb0-b91e-2b80e9d31075}</UniqueIdentifier>
     </Filter>
+    <Filter Include="core\Win">
+      <UniqueIdentifier>{bcca59ac-dea2-4abe-86db-c0d8fe734118}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="foundation_unit_test.cpp">
@@ -40,6 +43,10 @@
       <Filter>core</Filter>
     </ClCompile>
     <ClCompile Include="transform.cpp" />
+    <ClCompile Include="entity.cpp" />
+    <ClCompile Include="Win\win_platform.cpp">
+      <Filter>core\Win</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="temp_allocator.h">
@@ -105,6 +112,13 @@
       <Filter>core</Filter>
     </ClInclude>
     <ClInclude Include="transform.h" />
+    <ClInclude Include="component.h" />
+    <ClInclude Include="system.h" />
+    <ClInclude Include="entity.h" />
+    <ClInclude Include="component_types.h" />
+    <ClInclude Include="platform.h">
+      <Filter>core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Assets\Shaders\basic.frag">

@@ -10,7 +10,7 @@ namespace logger
         struct Logger
         { 
             Logger()
-                : next(nullptr), level(LogLevel::cInfo)
+                : next(nullptr), level(LogLevel::cDebug)
             { }
             
             virtual ~Logger()
@@ -86,10 +86,11 @@ namespace logger
 
     namespace internal {
         const size_t cMaxLogBufferSize = 512;
-        const char* cRawLog = "RAW";
-        const char* cInfoLog = "INFO";
-        const char* cWarnLog = "WARNING";
-        const char* cErrorLog = "ERROR";
+        const char* cRawLog = "RAW: ";
+        const char* cDebugLog = "";
+        const char* cInfoLog = "INFO: ";
+        const char* cWarnLog = "WARNING: ";
+        const char* cErrorLog = "ERROR: ";
 
         void format_log_msg(LogLevel _level, const char* _context, const char* _message, char* _out)
         {
@@ -98,8 +99,12 @@ namespace logger
             case LogLevel::cRaw:
                 logStr = cRawLog;
                 break;
-
+            
             default:
+            case LogLevel::cDebug:
+                logStr = cDebugLog;
+                break;
+            
             case LogLevel::cInfo:
                 logStr = cInfoLog;
                 break;
@@ -113,7 +118,12 @@ namespace logger
                 break;
             }
 
-            snprintf(_out, cMaxLogBufferSize, "[%s] %s: %s\n", _context, logStr, _message);
+            if (_context) {
+                snprintf(_out, cMaxLogBufferSize, "[%s] %s%s\n", _context, logStr, _message);
+            }
+            else {
+                snprintf(_out, cMaxLogBufferSize, "%s%s\n", logStr, _message);
+            }
         }
 
         void raw_log(internal::Logger& _logger, LogLevel _level, const char* _context, const char* _message)
@@ -149,6 +159,14 @@ namespace logger
         va_list args;
         va_start(args, _format);
         _logv(LogLevel::cRaw, _context, _format, args);
+        va_end(args);
+    }
+
+    void debug(const char* _context, const char* _format, ...)
+    {
+        va_list args;
+        va_start(args, _format);
+        _logv(LogLevel::cDebug, _context, _format, args);
         va_end(args);
     }
 

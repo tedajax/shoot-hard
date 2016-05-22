@@ -30,7 +30,6 @@ namespace renderer
 
         for (int i = 0; i < (int)RenderBuckets::cCount; ++i) {
             delete _renderer._renderBuckets[i];
-            
         }
     }
 

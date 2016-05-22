@@ -6,10 +6,18 @@
 #   define COMPILER_GCC_COMPAT
 #endif
 
-#ifdef COMPILER_MSVC_COMPAT
+#if defined(COMPILER_MSVC_COMPAT)
 #pragma warning(disable: 4100)
 #pragma warning(disable: 4521)
 #pragma warning(disable: 4351)
+
+#define CORE_POINTER_SIZE sizeof(void*)
+
+#if defined(_M_X64) || defined(__amd64__)
+#define CORE_IS_64_BIT
+#else
+#define CORE_IS_32_BIT
+#endif
 
 #define CORE_ALIGNOF(t) __alignof(t)
 #define CORE_ALIGN(v) __declspec(align(v))
@@ -34,9 +42,7 @@ namespace core { namespace internal { template <typename T> CORE_FORCE_INLINE T 
 
 #define CORE_NO_COPY(name) name(const name &) = delete; name& operator=(const name &) = delete;
 
-#endif // COMPILER_MSVC_COMPAT
-
-#ifdef COMPILER_GCC_COMPAT
+#elif defined(COMPILER_GCC_COMPAT)
 #define CORE_ALIGNOF(t) __alignof(t)
 #define CORE_ALIGN(v) __attribute__((aligned(v)))
 #define CORE_ALIGN_4 __attribute__((aligned(4)))
