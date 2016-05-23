@@ -1,7 +1,6 @@
 #include "memory.h"
 
 #include <cstdlib>
-#include <cassert>
 #include <new>
 
 namespace {
@@ -133,7 +132,7 @@ namespace {
         }
 
         ~ScratchAllocator() {
-            assert(_free == _allocate);
+            ASSERT(_free == _allocate, "Free and allocate functions are identical.  What are you doing?");
             _backing.deallocate(_begin);
         }
 
@@ -147,7 +146,7 @@ namespace {
         }
 
         virtual void *allocate(uint32_t size, uint32_t align) {
-            assert(align % 4 == 0);
+            ASSERT(align % 4 == 0, "Alignment must be multiple of 4.");
             size = ((size + 3)/4)*4;
 
             char *p = _allocate;
@@ -185,7 +184,7 @@ namespace {
 
             // Mark this slot as free
             Header *h = header(p);
-            assert((h->size & 0x80000000u) == 0);
+            ASSERT((h->size & 0x80000000u) == 0, "");
             h->size = h->size | 0x80000000u;
 
             // Advance the free pointer past all free slots.

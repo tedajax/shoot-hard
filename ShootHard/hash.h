@@ -40,6 +40,10 @@ namespace foundation
         /// efficiently iterate over the elements (in random order).
         template<typename T> const typename Hash<T>::Entry *begin(const Hash<T> &h);
         template<typename T> const typename Hash<T>::Entry *end(const Hash<T> &h);
+
+        template<typename T> const typename Hash<T>::Entry* walk_next(const Hash<T> &h, const typename Hash<T>::Entry* ptr);
+
+        template <typename T> uint32 size(const Hash<T>& h) { return array::size(h._data); }
     }
 
     namespace multi_hash
@@ -276,6 +280,11 @@ namespace foundation
         template<typename T> const typename Hash<T>::Entry *end(const Hash<T> &h)
         {
             return array::end(h._data);
+        }
+
+        template<typename T> const typename Hash<T>::Entry* walk_next(const Hash<T> &h, const typename Hash<T>::Entry* ptr)
+        {
+            return array::next(h._data, ptr);
         }
     }
 

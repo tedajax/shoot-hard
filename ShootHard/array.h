@@ -81,6 +81,26 @@ namespace foundation {
         template<typename T> inline T& back(Array<T> &a)                    {return a._data[a._size-1];}
         template<typename T> inline const T& back(const Array<T> &a)        {return a._data[a._size-1];}
 
+        template <typename T> inline T* next(Array<T> &a, T* current)
+        {
+            if (current == end(a) - 1) {
+                return nullptr;
+            }
+            else {
+                return a._data + (current - a._data + 1);
+            }
+        }
+
+        template <typename T> inline T* prev(Array<T> &a, T* current)
+        {
+            if (current == begin(a)) {
+                return nullptr;
+            }
+            else {
+                return a._data + (current - a._data - 1);
+            }
+        }
+
         template <typename T> inline void clear(Array<T> &a) {resize(a,0);}
         template <typename T> inline void trim(Array<T> &a) {set_capacity(a,a._size);}
 

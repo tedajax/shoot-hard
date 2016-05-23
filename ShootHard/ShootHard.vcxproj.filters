@@ -61,6 +61,9 @@
     <ClCompile Include="sprite_system.cpp">
       <Filter>component_entity\systems</Filter>
     </ClCompile>
+    <ClCompile Include="memory_tracker.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="temp_allocator.h">
@@ -146,6 +149,9 @@
     </ClInclude>
     <ClInclude Include="component_entity.h">
       <Filter>component_entity</Filter>
+    </ClInclude>
+    <ClInclude Include="memory_tracker.h">
+      <Filter>core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

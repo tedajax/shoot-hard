@@ -27,6 +27,7 @@ int main(int argc, char* argv[])
 {
     logger::init();
     core::init();
+    logger::debug("Handle", "%d", sizeof(ComponentHandle<TransformComponent>));
     int result = run();
     core::shutdown();
     logger::shutdown();

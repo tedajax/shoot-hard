@@ -3,6 +3,11 @@
 #include "types.h"
 #include "memory_types.h"
 
+namespace core
+{
+    class MemoryTracker;
+}
+
 namespace foundation
 {
 	/// Base class for memory allocators.
@@ -85,6 +90,9 @@ namespace foundation
 		inline const void *pointer_add(const void *p, uint32_t bytes);
 		inline void *pointer_sub(void *p, uint32_t bytes);
 		inline const void *pointer_sub(const void *p, uint32_t bytes);
+
+        core::MemoryTracker* set_memory_tracker(core::MemoryTracker* _tracker);
+        core::MemoryTracker* get_memory_tracker();
 	}
 
 	// ---------------------------------------------------------------
